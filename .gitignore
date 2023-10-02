@@ -1,0 +1,4 @@
+*.txt
+*.pyc
+praw.ini
+SteamAPIKey.py
