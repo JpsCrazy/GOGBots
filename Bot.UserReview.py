@@ -72,7 +72,7 @@ while True:
     CooldownRemover.CooldownRemover(reddit, GoG)
     Modmail.ModMailCheck(reddit, ModList)
     try:
-        print('Checking Requests', datetime.datetime.now())
+        print(datetime.datetime.now(), 'Starting Request check...')
         for submission in GoG.stream.submissions(pause_after=-1):
             if submission is None:
                 time.sleep(60)
@@ -126,7 +126,7 @@ while True:
                     HistoryCheck.HistoryGiveawayCheck(User, UserGiveawayHistory, GiveawaySubs, RequestOrComment, PostID)
                     
                 except Exception as e:
-                    print("Requests", e, traceback.format_exc())
+                    print(datetime.datetime.now(), "Requests", e, traceback.format_exc())
 
             ###--Puts users on cooldown if multiple [GOG] posts within past month
             elif "[gog]" in str(Title).lower() and "[offer]" not in str(Title).lower() and "[request]" not in str(Title).lower() and "[discussion]" not in str(Title).lower() and "[intro]" not in str(Title).lower():
@@ -135,14 +135,14 @@ while True:
                     UserFlair.CooldownChecker(User, UserPostHistory, GoG)
                                     
                 except Exception as e:
-                    print("GOG threads", e, traceback.format_exc())
+                    print(datetime.datetime.now(), "GOG threads", e, traceback.format_exc())
 
     except Exception as e:
-        print("Posts", e, traceback.format_exc())
+        print(datetime.datetime.now(), "Posts", e, traceback.format_exc())
                     
 ###-----Checks when user comments in Offer--------------------------------------------------------------
     try:
-        print('Checking Comments',  datetime.datetime.now())
+        print(datetime.datetime.now(), 'Starting Comments check...')
         for comment in GoG.stream.comments(pause_after=-1):
             if comment is None:
                 time.sleep(180)
@@ -221,7 +221,7 @@ while True:
                         HistoryCheck.HistoryGiveawayCheck(User, UserGiveawayHistory, GiveawaySubs, RequestOrComment, PostID)
                     
                     except Exception as e:
-                        print("Comments", e, traceback.format_exc())
+                        print(datetime.datetime.now(), "Comments", e, traceback.format_exc())
 
     except Exception as e:
             print(e, traceback.format_exc())

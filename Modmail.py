@@ -1,3 +1,4 @@
+import datetime
 import re
 import os
 import pprint
@@ -11,7 +12,7 @@ def ModMailCheck(reddit, ModList):
             ModMailLog = ModMailLog.split("\n")
             ModMailLog = list(filter(None, ModMailLog))
 
-    print("Starting modmail bot...")
+    print(datetime.datetime.now(), "Starting Modmail check...")
     try:
         #Replace with your subreddit name
         ModMailMaster = reddit.subreddit('GiftofGames').modmail

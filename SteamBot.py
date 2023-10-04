@@ -35,7 +35,7 @@ def SteamSanitizer(User, UserID, ID64, PlatformIDList, PostID, RequestOrComment)
                 Remover.GeneralRemove(RequestOrComment, PostID, RemovalReason)
             if int(LevelJSON['response']['player_level']) is None:
                 RemovalReason = "Low Steam Level"
-                print(str(User) + "'s Steam level is less than 2; removing comment with Steam ID " + ID64)
+                print(str(User) + "'s Steam level is not detected; removing comment with Steam ID " + ID64)
                 Remover.GeneralRemove(RequestOrComment, PostID, RemovalReason)
         except Exception as e:
             print("SteamSanitizer Level", e, traceback.format_exc())

@@ -1,4 +1,5 @@
 #!/use/bin/python
+import datetime
 import praw
 import time
 import traceback
@@ -17,17 +18,17 @@ MaxBanLength = 90
 
 #!!! add links to deleted posts?
 def DeletionChecker(reddit, GoG, GoGdeletes):
-    print("GOG Deletion bot starting...")
+    # print("GOG Deletion bot starting...")
 
     try:
-        print("Starting check for new deletions...")
+        print(datetime.datetime.now(), "Starting Deletion check...")
         for submission in GoGdeletes.stream.submissions(pause_after=-1):
             if submission is None:
                 break
             TimeDiff = time.time()-submission.created_utc
             SevenDays = 86400*7
             if TimeDiff > SevenDays:
-                print("End of new deletions...")
+                # print("End of new deletions...")
                 break
             Title = submission.title
             PostID = submission.id
@@ -48,13 +49,13 @@ def DeletionChecker(reddit, GoG, GoGdeletes):
                         continue
                     WikiWrite.WriteWiki("postlog/deletionpostlog", PostLogLine, GoG)
                          
-        print("Beginning check for deletion...")
+        # print("Beginning check for deletion bans...")
         BanList = ""
         DeletionPostLog = GoG.wiki["postlog/deletionpostlog"].content_md
         for line in DeletionPostLog.split("\n\n"):
             InitialLogSearch = re.search("(?i)^(\S*) (.*?) (\S*)$", line)
             if InitialLogSearch == None:
-                print("No ban found on line")
+                # print("No ban found on line")
                 continue
             SubjectUser = InitialLogSearch.group(1)
             if any(GoG.banned(redditor=SubjectUser)) == True:
@@ -82,7 +83,7 @@ def DeletionChecker(reddit, GoG, GoGdeletes):
         for line in BanList.split("\n"):
             FinalSearch = re.search("(\S*) (\d*)", line)
             if FinalSearch == None:
-                print("No bans with days to issue")
+                # print("No bans with days to issue")
                 break
             UserToBan = FinalSearch.group(1)
             DaysToBan = FinalSearch.group(2)
@@ -100,7 +101,7 @@ def DeletionChecker(reddit, GoG, GoGdeletes):
             else:
                 print(SubjectUser + "is not valid")
         
-        print("Bans completed; resetting wiki...")
+        # print("Bans completed; resetting wiki...")
         GoG.wiki["postlog/deletionpostlog"].edit(content="", reason="Reset After Banning")
             
     except Exception as e:

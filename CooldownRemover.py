@@ -13,7 +13,7 @@ def RemoveLog(WikiContent, Line):
     return WikiContent
 
 def CooldownRemover(reddit, GoG):
-    print("User Reddit Cooldown Remover bot starting...")
+    print(datetime.datetime.now(), "Starting Cooldown Remover...")
     try:
         Wiki = GoG.wiki["cooldownlog"]
         WikiContent = Wiki.content_md.strip()
@@ -51,7 +51,7 @@ def CooldownRemover(reddit, GoG):
                 except Exception as e:
                     print("Error resetting flair for", User, "\n", e, traceback.format_exc())
                     
-        print("Bringing wiki current")
+        # print("Bringing wiki current")
         Wiki.edit(content=WikiContent, reason="Cooldown Removals")
     except Exception as e:
         print(e, traceback.format_exc())
