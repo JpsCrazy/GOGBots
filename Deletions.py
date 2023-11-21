@@ -40,8 +40,8 @@ def DeletionChecker(reddit, GoG, GoGdeletes):
                     TimeUp = UserSearch.group(4)
                     if TimeUp == "0.01":
                         continue
-                    if any(GoG.banned(redditor=UserToBan)) == True:
-                        print(SubjectUser + " is already banned")
+                    if any(GoG.banned(redditor=User)) == True:
+                        print(User + " is already banned")
                         continue
                     PostLogLine = str(User) + " " + str(Type) + " " + str(PostID)
                     #TO-DO: Make one list, update wiki once

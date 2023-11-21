@@ -45,7 +45,7 @@ def GeneralRemove(RequestOrComment, PostID, RemovalReason, RequestTime="Error"):
         elif RemovalReason == "Request Limit":
             RemovalReasonText = "Request posted within 3 days of another Request; " + RequestOrComment
             RemovalMessage = RemovalMessageOpening + "You may only post one Request every 72 hours (3 days). Your last Request was is " + str(RequestTime) + " Reddit may round the time of your last post making it appear older than it actually is." + RemovalMessageEnding
-        print(RemovalReasonText)
+        # print(RemovalReasonText)
         PostID.mod.remove(mod_note=RemovalReasonText)
         PostID.mod.send_removal_message(RemovalMessage, title=RemovalReason, type=PublicOrPrivate)
         RemovalReason = None

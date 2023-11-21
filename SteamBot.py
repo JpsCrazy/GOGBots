@@ -6,14 +6,11 @@ import json
 from SteamAPIKey import SteamAPIKey
 import Remover
 
-def SteamSanitizer(User, UserID, ID64, PlatformIDList, PostID, RequestOrComment):
+def SteamSanitizer(User, PostID, RequestOrComment, ID64):
     try:
-        PlatformIDList["Steam"] = UserID.replace("www.","").replace("http:","https:").replace("\\", "").replace("/id/","/profiles/")
         ProfileVisibility = requests.get("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" + SteamAPIKey + "&steamids=" + ID64)
         ProfileVisibilityJSON = ProfileVisibility.json()
-    ##    print("\n DEBUG", UserID, ID64, UserIDSearch, ProfileVisibilityJSON, "\n")
-        if str(ProfileVisibilityJSON) == "{'response': {}}" and ProfileVisibility.ok:
-            return
+    ##    print("\n DEBUG", ID64, UserIDSearch, ProfileVisibilityJSON, "\n")
         if ProfileVisibilityJSON['response']['players'][0]['communityvisibilitystate'] != 3 and ProfileVisibility.ok:
             RemovalReason = "Private Steam Profile"
             print(str(User) + "'s Steam profile is not visible; removing.")

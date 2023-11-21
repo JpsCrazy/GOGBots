@@ -146,7 +146,7 @@ def FlairAssigner(User, Giftee, comment, parent, GoG):
         ###--If user already on Cooldown, update backed up flair instead of current flair
         Wiki = GoG.wiki["cooldownlog"]
         WikiContent = Wiki.content_md.strip()
-        WikiContent = str(WikiContent).replace(line,"").replace("\n\n\n","\n\n")
+        WikiContent = str(WikiContent).replace("\n\n\n","\n\n")
         for line in WikiContent.splitlines():
             if len(line) == 0: #if line is empty, skip
                 continue

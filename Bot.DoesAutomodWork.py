@@ -91,7 +91,7 @@ while True:
                 if comment.author == 'AutoModerator':
                     Counter = Counter + 1
                     
-            if Counter != 0:
+            if Counter == 0:
                 print("redd.it/" + PostID)
             Checked = Checked + " " + PostID
                 
