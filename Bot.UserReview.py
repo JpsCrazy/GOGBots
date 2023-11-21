@@ -207,7 +207,7 @@ while True:
                     except Exception as e:
                         print(datetime.datetime.now(), "Comments", e, traceback.format_exc())
 
-    #except Exception as e:
-    #        print(e, traceback.format_exc())
-    #        time.sleep(3)
-    #        continue
+    except Exception as e:
+           print(e, traceback.format_exc())
+           time.sleep(3)
+           continue
