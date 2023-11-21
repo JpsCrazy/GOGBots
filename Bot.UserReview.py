@@ -68,85 +68,86 @@ print("User Reddit History bot starting...")
         
 while True:
     
-#     Deletions.DeletionChecker(reddit, GoG, GoGdeletes)
-#     CooldownRemover.CooldownRemover(reddit, GoG)
-#     Modmail.ModMailCheck(reddit, ModList)
-#     try:
-#         print(datetime.datetime.now(), 'Starting Request check...')
-#         for submission in GoG.stream.submissions(pause_after=-1):
-#             if submission is None:
-#                 time.sleep(60)
-#                 break
+    Deletions.DeletionChecker(reddit, GoG, GoGdeletes)
+    CooldownRemover.CooldownRemover(reddit, GoG)
+    Modmail.ModMailCheck(reddit, ModList)
+    try:
+        print(datetime.datetime.now(), 'Starting Request check...')
+        for submission in GoG.stream.submissions(pause_after=-1):
+            if submission is None:
+                time.sleep(60)
+                break
 
-#             if submission.banned_by!=None:
-#                 continue
+            if submission.banned_by!=None:
+                continue
 
-#             if submission.removed is True:
-#                 continue
+            if submission.removed is True:
+                continue
 
-#             RequestOrComment = "Request"
-#             User = submission.author
-#             Title = submission.title
-#             BodyText = submission.selftext
-#             PostID = submission.id
-#             SubmissionDate = submission.created_utc
-#             Delay = time.time() - SubmissionDate
+            RequestOrComment = "Request"
+            User = submission.author
+            Title = submission.title
+            BodyText = submission.selftext
+            PostID = submission.id
+            SubmissionDate = submission.created_utc
+            Delay = time.time() - SubmissionDate
             
-#             if User=="OurRobotOverlord":
-#                 continue
+            if User=="OurRobotOverlord":
+                continue
 
-#             if Delay < 90:
-#                 continue
+            if Delay < 90:
+                continue
 
-#             PostLogLine = "https://reddit.com/comments/" + str(PostID) + "/" + str(User)
-#             if PostLogLine in GoG.wiki["postlog"].content_md:
-#                 continue
-#             WikiWrite.WriteWiki("postlog", PostLogLine, GoG)
+            PostLogLine = "https://reddit.com/comments/" + str(PostID) + "/" + str(User)
+            if PostLogLine in GoG.wiki["postlog"].content_md:
+                continue
+            WikiWrite.WriteWiki("postlog", PostLogLine, GoG)
             
-#             if "[request]" in str(Title).lower():
-#                 try:
-#                     ThreeDays = 86400*3 #86400 seconds is 1 day
-#                     TimeDifference = int(time.time())-int(SubmissionDate)
-#                     if TimeDifference < ThreeDays:
-# #                             print('Starting RequestLimiter.RepostCheck()')
-#                         RequestLimiter.RepostCheck(reddit, User, SubmissionDate, PostID)
+            if "[request]" in str(Title).lower():
+                try:
+                    ThreeDays = 86400*3 #86400 seconds is 1 day
+                    TimeDifference = int(time.time())-int(SubmissionDate)
+                    if TimeDifference < ThreeDays:
+#                             print('Starting RequestLimiter.RepostCheck()')
+                        RequestLimiter.RepostCheck(reddit, User, SubmissionDate, PostID)
                     
-# #                         print('Starting RequestLimiter.PCTagCheck()')
-#                     RequestLimiter.PCTagCheck(User, Title, PostID, GoG)
+#                         print('Starting RequestLimiter.PCTagCheck()')
+                    RequestLimiter.PCTagCheck(User, Title, PostID, GoG)
                     
-# #                         print('Starting ReceiversGamingPlatform.ProfileChecker()')
-#                     ReceiversGamingPlatform.ProfileChecker(User, BodyText, RequestOrComment, PostID, GoG)
+#                         print('Starting ReceiversGamingPlatform.ProfileChecker()')
+                    ReceiversGamingPlatform.ProfileChecker(User, BodyText, RequestOrComment, PostID, GoG)
 
-# #                         print('Starting HistoryCheck.HistoryKarmaCheck()')
-#                     UserComments = reddit.redditor("{}".format(submission.author)).comments.top(limit=None) ##Returns top 1000 comments from User
-#                     HistoryCheck.HistoryKarmaCheck(User, UserComments, KarmaSubs, RequestOrComment, PostID)
+#                         print('Starting HistoryCheck.HistoryKarmaCheck()')
+                    UserComments = reddit.redditor("{}".format(submission.author)).comments.top(limit=None) ##Returns top 1000 comments from User
+                    HistoryCheck.HistoryKarmaCheck(User, UserComments, KarmaSubs, RequestOrComment, PostID)
                     
-# #                         print('Starting HistoryCheck.HistoryGiveawayCheck()')
-#                     UserGiveawayHistory = reddit.redditor("{}".format(submission.author)).new(limit=PostHistory)    ##Returns set amount of activity from User
-#                     HistoryCheck.HistoryGiveawayCheck(User, UserGiveawayHistory, GiveawaySubs, RequestOrComment, PostID)
+#                         print('Starting HistoryCheck.HistoryGiveawayCheck()')
+                    UserGiveawayHistory = reddit.redditor("{}".format(submission.author)).new(limit=PostHistory)    ##Returns set amount of activity from User
+                    HistoryCheck.HistoryGiveawayCheck(User, UserGiveawayHistory, GiveawaySubs, RequestOrComment, PostID)
                     
-#                 except Exception as e:
-#                     print(datetime.datetime.now(), "Requests", e, traceback.format_exc())
+                except Exception as e:
+                    print(datetime.datetime.now(), "Requests", e, traceback.format_exc())
 
-#             ###--Puts users on cooldown if multiple [GOG] posts within past month
-#             elif "[gog]" in str(Title).lower() and "[offer]" not in str(Title).lower() and "[request]" not in str(Title).lower() and "[discussion]" not in str(Title).lower() and "[intro]" not in str(Title).lower():
-#                 try:
-#                     UserPostHistory = reddit.redditor("{}".format(User)).submissions.new()
-#                     UserFlair.CooldownChecker(User, UserPostHistory, GoG)
+            ###--Puts users on cooldown if multiple [GOG] posts within past month
+            elif "[gog]" in str(Title).lower() and "[offer]" not in str(Title).lower() and "[request]" not in str(Title).lower() and "[discussion]" not in str(Title).lower() and "[intro]" not in str(Title).lower():
+                try:
+                    UserPostHistory = reddit.redditor("{}".format(User)).submissions.new()
+                    UserFlair.CooldownChecker(User, UserPostHistory, GoG)
                                     
-#                 except Exception as e:
-#                     print(datetime.datetime.now(), "GOG threads", e, traceback.format_exc())
+                except Exception as e:
+                    print(datetime.datetime.now(), "GOG threads", e, traceback.format_exc())
 
-#     except Exception as e:
-#         print(datetime.datetime.now(), "Posts", e, traceback.format_exc())
+    except Exception as e:
+        print(datetime.datetime.now(), "Posts", e, traceback.format_exc())
                     
 ###-----Checks when user comments in Offer--------------------------------------------------------------
-    #try:
-    for submission in GoG.new(limit=None):
-        submission.comments.replace_more(limit=None) 
-        #print(datetime.datetime.now(), 'Starting Comments check...')
-        #for comment in GoG.stream.comments():
-        for comment in submission.comments.list():
+    try:
+    # commented out section is for history check
+    # for submission in GoG.new(limit=None):
+        # submission.comments.replace_more(limit=None) 
+        # for comment in submission.comments.list():
+        print(datetime.datetime.now(), 'Starting Comments check...')
+        for comment in GoG.stream.comments(pause_after=-1):
             if comment is None:
                 time.sleep(180)
                 break
