@@ -52,6 +52,9 @@ def GiftCheck(BodyText, comment, User, parent, reddit, GoG):
             if Giftee is None:
                 print("Gift but no giftee; probable error")
                 continue
+            GifteeLinked = re.search (r'(?i)reddit\.com/(?:u|user)/(\S*)/|\)', Giftee)
+            if GifteeLinked is not None:
+                Giftee = GifteeLinked.group(1).replace("\\","")
             if ValidUser.ValidUserCheck(reddit, Giftee) == 0:
                 print(str(User), "attempted to gift", str(Giftee), "but they do not exist")
                 comment.reply("Unable to flair u/" + str(Giftee) + " as their profile does not seem to exist. Please double check your spelling and try again. \n\nPlease [contact the moderators](https://www.reddit.com/message/compose?to=%2Fr%2FGiftofGames) if you believe this action was made in error.")

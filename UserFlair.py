@@ -85,23 +85,27 @@ def doFlair(gifter,gifted,comment,GoG):
 def doCooldown(UserToCooldown, GoG):
     #!!! should really pass reddit down instead of re-creating it
     reddit = praw.Reddit('GOGUserHistoryBot', user_agent='GOGUserHistoryBot_1.9')
-    if ValidUser.ValidUserCheck(reddit, UserToCooldown) == 1:
-        if any(GoG.banned(redditor=UserToCooldown)) != True:
-            try:
-                Date = datetime.date.today()
-                if str(next(GoG.flair("{}".format(UserToCooldown)))['flair_text']) is None:
-                    TextAndCSS = "Grabbed 1" + " || " + "nes"
-                else:
-                    TextAndCSS = str(next(GoG.flair("{}".format(UserToCooldown)))['flair_text']) + " || " + str(next(GoG.flair("{}".format(UserToCooldown)))['flair_css_class'])
-                CooldownLine = str(UserToCooldown) + " " + TextAndCSS + " || " + str(Date)
-                print(str(UserToCooldown) + " is being put on cooldown")
-                WikiWrite.WriteWiki("cooldownlog", str(CooldownLine), GoG)
-                GoG.flair.set(UserToCooldown, text='Cooldown', css_class='cooldown')
-                GoG.modmail.create("Being put on cooldown in r/GiftofGames", "You have been put on a cooldown after receiving a number of games in a relatively short span of time. \n\nYou may still particpate on the subreddit, however you will be unable to enter an [OFFER] or make a [REQUEST] for 30 days. \n\nThis action was performed by a bot. Please reply to this message if you believe this action was made in error.", UserToCooldown)
-            except Exception as e:
-                print(time.strftime("%H:%M"),' Exception:', e, traceback.format_exc())
+    if ValidUser.ValidUserCheck(reddit, UserToCooldown) != 1:
+        return
+    if any(GoG.banned(redditor=UserToCooldown)) == True:
+        return
+    if "cooldown" not in str(next(GoG.flair("{}".format(UserToCooldown)))['flair_text']).lower():
+        try:
+            Date = datetime.date.today()
+            if str(next(GoG.flair("{}".format(UserToCooldown)))['flair_text']) is None:
+                TextAndCSS = "Grabbed 1" + " || " + "nes"
+            else:
+                TextAndCSS = str(next(GoG.flair("{}".format(UserToCooldown)))['flair_text']) + " || " + str(next(GoG.flair("{}".format(UserToCooldown)))['flair_css_class'])
+            CooldownLine = str(UserToCooldown) + " " + TextAndCSS + " || " + str(Date)
+            print(str(UserToCooldown) + " is being put on cooldown")
+            WikiWrite.WriteWiki("cooldownlog", str(CooldownLine), GoG)
+            GoG.flair.set(UserToCooldown, text='Cooldown', css_class='cooldown')
+            GoG.modmail.create("Being put on cooldown in r/GiftofGames", "You have been put on a cooldown after receiving a number of games in a relatively short span of time. \n\nYou may still particpate on the subreddit, however you will be unable to enter an [OFFER] or make a [REQUEST] for 30 days. \n\nThis action was performed by a bot. Please reply to this message if you believe this action was made in error.", UserToCooldown)
+        except Exception as e:
+            print(time.strftime("%H:%M"),' Exception:', e, traceback.format_exc())
 
 def CooldownChecker(User, UserPostHistory, GoG, RecentGOGPosts=0):
+
     for post in UserPostHistory:
         if post is None:
             break

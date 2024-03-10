@@ -40,8 +40,7 @@ while True:
             Gifter = GOGLine.group(1)
             if "ourrobotoverlord" in str(Gifter).lower():
                 Gifter = ""
-            GifterNoSpecial = Gifter.replace("-", "").replace("_", "")
-            GifterSpaceSpecial = Gifter.replace("-", " ").replace("_", " ")
+            GifterEscaped = re.escape(Gifter)
             Giftee = GOGLine.group(2)
             Gift = GOGLine.group(3)
             Platform = GOGLine.group(4)
@@ -58,6 +57,9 @@ while True:
             if any(reddit.subreddit("GiftofGames").banned(redditor=Giftee)):
 ##                            print(Giftee, "is banned.")
                 continue
+            GifteeLinked = re.search (r'(?i)reddit\.com/(?:u|user)/(\S*)/|\)', Giftee)
+            if GifteeLinked is not None:
+                Giftee = GifteeLinked.group(1).replace("\\","")
             
                    
             try:
@@ -69,7 +71,7 @@ while True:
                     if post is None:
                         continue
 ##                    print(post.title)
-                    GOGThread = re.search(rf'(?i)\[GOG\].*({Gifter}|{GifterNoSpecial}|{GifterSpaceSpecial})', post.title)
+                    GOGThread = re.search(rf'(?i)\[GOG\].*({Gifter}|{GifterEscaped})', post.title)
                     if GOGThread is not None:
 ##                        print(str(post.title), Giftee, Gifter)
                         GOGFound = True
