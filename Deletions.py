@@ -22,6 +22,7 @@ def DeletionChecker(reddit, GoG, GoGdeletes):
 
     try:
         print(datetime.datetime.now(), "Starting Deletion check...")
+        InvalidUsers = []
         for submission in GoGdeletes.stream.submissions(pause_after=-1):
             if submission is None:
                 break
@@ -33,21 +34,28 @@ def DeletionChecker(reddit, GoG, GoGdeletes):
             Title = submission.title
             PostID = submission.id
             if "gog" in Title.lower() or "request" in Title.lower():
-                if "offer" not in Title.lower():
-                    UserSearch = re.search('(?iu)\/u\/(\S*) \[(\S*( \S*){0,1})] was deleted from /r/GiftofGames on.* up (\S*) days', Title)
-                    User = UserSearch.group(1)
-                    Type = UserSearch.group(2)
-                    TimeUp = UserSearch.group(4)
-                    if TimeUp == "0.01":
-                        continue
-                    if any(GoG.banned(redditor=User)) == True:
-                        print(User + " is already banned")
-                        continue
-                    PostLogLine = str(User) + " " + str(Type) + " " + str(PostID)
-                    #TO-DO: Make one list, update wiki once
-                    if PostLogLine in GoG.wiki["postlog/deletionpostlog"].content_md:
-                        continue
-                    WikiWrite.WriteWiki("postlog/deletionpostlog", PostLogLine, GoG)
+                if "offer" in Title.lower():
+                    continue
+                UserSearch = re.search('(?iu)\/u\/(\S*) \[(\S*( \S*){0,1})] was deleted from /r/GiftofGames on.* up (\S*) days', Title)
+                User = UserSearch.group(1)
+                Type = UserSearch.group(2)
+                TimeUp = UserSearch.group(4)
+                if TimeUp == "0.01":
+                    continue
+                if User in InvalidUsers:
+                    continue
+                if ValidUser.ValidUserCheck(reddit, User) != 1:
+                    InvalidUsers.append(User)
+                    continue
+                if any(GoG.banned(redditor=User)) == True:
+                    #print(User + " is already banned")
+                    InvalidUsers.append(User)
+                    continue
+                PostLogLine = str(User) + " " + str(Type) + " " + str(PostID)
+                #TO-DO: Make one list, update wiki once
+                if PostLogLine in GoG.wiki["postlog/deletionpostlog"].content_md:
+                    continue
+                WikiWrite.WriteWiki("postlog/deletionpostlog", PostLogLine, GoG)
                          
         # print("Beginning check for deletion bans...")
         BanList = ""
@@ -59,7 +67,7 @@ def DeletionChecker(reddit, GoG, GoGdeletes):
                 continue
             SubjectUser = InitialLogSearch.group(1)
             if any(GoG.banned(redditor=SubjectUser)) == True:
-                print(SubjectUser + " is already banned")
+                #print(SubjectUser + " is already banned")
                 continue
             if BanList is not None:
                 if SubjectUser in BanList:
@@ -88,18 +96,12 @@ def DeletionChecker(reddit, GoG, GoGdeletes):
             UserToBan = FinalSearch.group(1)
             DaysToBan = FinalSearch.group(2)
             
-            if any(GoG.banned(redditor=UserToBan)) == True:
-                print(SubjectUser + " is already banned")
-                continue
-            
-            if ValidUser.ValidUserCheck(reddit, UserToBan) == 1:
-                print(UserToBan, "being banned for", DaysToBan, "days")
-                try:
-                    GoG.banned.add(UserToBan, ban_reason="Post Deletions", ban_note="Post Deletions", ban_message=FullMessage, duration=DaysToBan)
-                except Exception as e:
-                    print("Banning error", e)
-            else:
-                print(SubjectUser + "is not valid")
+            print(UserToBan, "being banned for", DaysToBan, "days")
+            try:
+                GoG.banned.add(UserToBan, ban_reason="Post Deletions", ban_note="Post Deletions", ban_message=FullMessage, duration=DaysToBan)
+            except Exception as e:
+                print("Banning error", e)
+
         
         # print("Bans completed; resetting wiki...")
         GoG.wiki["postlog/deletionpostlog"].edit(content="", reason="Reset After Banning")

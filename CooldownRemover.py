@@ -41,7 +41,7 @@ def CooldownRemover(reddit, GoG):
                 continue
 
             
-            if TimeDiff > 30:
+            if TimeDiff > 29:
                 print("Removing " + User + " from cooldown and resetting flair to " + FlairText)
                 try:
                     pass

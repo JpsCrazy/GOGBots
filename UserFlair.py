@@ -107,6 +107,8 @@ def CooldownChecker(User, UserPostHistory, GoG, RecentGOGPosts=0):
             break
         if post.banned_by!=None:
             continue
+        if post.subreddit != "GiftofGames":
+            continue
         OneMonth = 86400*30 #86400 seconds is 1 day
         TimeDifference = int(time.time())-int(post.created_utc)
         if TimeDifference > OneMonth:

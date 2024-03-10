@@ -35,7 +35,7 @@ def SteamSanitizer(User, PostID, RequestOrComment, ID64):
                 print(str(User) + "'s Steam level is not detected; removing comment with Steam ID " + ID64)
                 Remover.GeneralRemove(RequestOrComment, PostID, RemovalReason)
         except Exception as e:
-            print("SteamSanitizer Level", e, traceback.format_exc())
+            print("SteamSanitizer Level", User, ID64, e, traceback.format_exc())
                 
     except Exception as e:
-        print("SteamSanitizer", e, traceback.format_exc())
+        print("SteamSanitizer", User, ID64, e, traceback.format_exc())
