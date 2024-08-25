@@ -33,10 +33,11 @@ def ModMailCheck(reddit, ModList):
                         
                     if mail.authors in ModList:
                         continue
-                    if mail.authors is 'ModSupportBot':
+                    if mail.authors == 'ModSupportBot':
                         continue
-                    if mail.authors.is_employee is True:
-                        continue
+                    for author in mail.authors:
+                        if author.is_employee is True:
+                            continue
 
                     # If a bot messages us, prevents our bot from responding
                     BotCheck = re.search(r'(?i)(This message was sent by a bot)', message.body_markdown)
