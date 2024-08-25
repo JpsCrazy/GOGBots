@@ -40,7 +40,7 @@ def DeletionChecker(reddit, GoG, GoGdeletes):
                 User = UserSearch.group(1)
                 Type = UserSearch.group(2)
                 TimeUp = UserSearch.group(4)
-                if TimeUp == "0.01":
+                if TimeUp == "0.01" or TimeUp > "365":
                     continue
                 if User in InvalidUsers:
                     continue

@@ -126,7 +126,7 @@ while True:
                 else:
                     print(e, Giftee)
 
-        time.sleep(600)        
+        time.sleep(3600)        
                     
     except Exception as e:
         print(e, Giftee, traceback.format_exc())
