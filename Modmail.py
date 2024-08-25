@@ -33,7 +33,7 @@ def ModMailCheck(reddit, ModList):
                         
                     if mail.authors in ModList:
                         continue
-                    if mail.authors in ('ModSupportBot'):
+                    if mail.authors is 'ModSupportBot':
                         continue
                     if mail.authors.is_employee is True:
                         continue
