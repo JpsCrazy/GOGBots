@@ -104,7 +104,7 @@ while True:
                 elif Today > ThreeDaysAfter:
                     try:
                         print("No GOG thread for", Gifter, "by", Giftee, "found. Sending reminder.")
-                        reddit.subreddit("GiftofGames").modmail.create("Reminder to post [GOG] thread", "As a reminder, all gifts received on this subreddit require you to post a [GOG] thank you thread ***with the gifter's username in the title***. \n\nNo [GOG] thank you thread to {} for {} found. Failure to post one will result in a ban. \n\nNo response to this message is needed unless you believe it was made in error.".format(Gifter,Gift), "{}".format(Giftee))
+                        reddit.subreddit("GiftofGames").modmail.create("Reminder to post [GOG] thread", "As a reminder, all gifts received on this subreddit require you to post a [GOG] thank you thread ***with the gifter's username in the title***. ([GOG] stands for GiftofGames; this is not solely for gog.com games) \n\nNo [GOG] thank you thread to {} for {} found. Failure to post one will result in a ban. \n\nNo response to this message is needed unless you believe it was made in error. This message was sent by a bot.".format(Gifter,Gift), "{}".format(Giftee))
                         if Giftee == "Nikhilkumar_001":
                             print(Giftee + '\n ' + 'GOGLineReminded' + '\n ' + GoG.wiki["gogthreadlog"].content_md)
                         WikiWrite.WriteWiki("gogthreadlog", GOGLineRemindedwDate, GoG)

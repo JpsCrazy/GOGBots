@@ -10,7 +10,8 @@ def ValidUserCheck(reddit, User):
         print(User, "not found", e)
         return 0
     except AttributeError as e:
-        print(User, "is lacking an id")
+        print(User, "is lacking an id; likely suspended")
+        return 3
     except Exception as e:
         print(e, traceback.format_exc())
         return 2
