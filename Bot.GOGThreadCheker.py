@@ -54,9 +54,16 @@ while True:
 
 ##                    print("Checking", Giftee, "for", Gift, "from", Gifter)           
 ##                        print("Checking server ban list")
+            GiftLogError = Giftee + ' received ' + Gift + ' from ' + Gifter + ' ERROR'
             if any(reddit.subreddit("GiftofGames").banned(redditor=Giftee)):
-##                            print(Giftee, "is banned.")
+                # print(Giftee, "is banned.")
+                WikiWrite.WriteWiki("gogthreadlog", GiftLogError, GoG)
                 continue
+
+            if ValidUser.ValidUserCheck(reddit, Giftee) != 1:
+                WikiWrite.WriteWiki("gogthreadlog", GiftLogError, GoG)
+                continue
+
             GifteeLinked = re.search (r'(?i)reddit\.com/(?:u|user)/(\S*)/|\)', Giftee)
             if GifteeLinked is not None:
                 Giftee = GifteeLinked.group(1).replace("\\","")
@@ -84,6 +91,9 @@ while True:
                 GOGLineRemindedwDate = GOGLineReminded + ' ' + str(Today)
                 
                 if GOGLineFound in GoG.wiki["gogthreadlog"].content_md:
+                    continue
+
+                if GiftLogError in GoG.wiki["gogthreadlog"].content_md:
                     continue
                 
                 if GOGFound == True:
@@ -120,7 +130,7 @@ while True:
             except PrawcoreException as e:
                 if "404" in str(e):
                     print(Giftee, "deleted their account. Skipping future checks.")
-                    WikiWrite.WriteWiki("gogthreadlog", GOGLine, GoG)
+                    WikiWrite.WriteWiki("gogthreadlog", GiftLogError, GoG)
                 elif "403" in str(e):
                     print(e, Giftee)
                 else:

@@ -32,7 +32,7 @@ import WikiWrite
 #)
 #dbcursor = mydb.cursor()
 
-ModList = "AutoModerator", "DjSoulFuck", "Saadieman", "freedomtacos", "Miniboyss", "Jaska95", "OurRobotOverlord", "JpsCrazy", "JpsCrazysBot", "fallen_fire", "MarioDesigns", "rollovertherainbow", "darkducote"
+ModList = "AutoModerator", "DjSoulFuck", "Saadieman", "freedomtacos", "Miniboyss", "Jaska95", "OurRobotOverlord", "JpsCrazy", "JpsCrazysBot", "fallen_fire", "MarioDesigns", "rollovertherainbow", "darkducote", "SaladMalone"
 KarmaSubs = "FreeKarma|FreeKarma4U|FreeKarma4You|DeFreeKarma|FreeKarmaSub4Sub|FreeKarama4UandMe|FreeKarma4NUDES|FreeKarmaForU|FreeKarma247|freekarmafromme|karmawhore|KarmaStore|FreeKarmaSubreddit|FreeKarmaChooChoo|GetFreeKarmaAnyTime|upvote|KarmaForFree|FreeKarma4All|Karma_Exchange|karma4karma|getkarma|MoreFreeKarma4U"
 GiveawaySubs = "GiftofGames|Free|RandomActs|RandomActsOfGaming|RandomActsofKindess|randomactsofcsgo|RandomActsOfChristmas|Giveaway|Random_Acts_Of_Amazon|randomactsofamazon|RandomActsOfPolish|playitforward|steam_giveaway|RandomActsOfTf2|LeagueOfGiving|Random_Acts_of_Etsy|Random_Acts_of_Lush|RandomKindess|Random_Acts_Of_Pizza"
 ##r/Giveaways not included because it doesn't seem to be the same as the others
