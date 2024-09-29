@@ -49,8 +49,9 @@ def ModMailCheck(reddit, ModList):
                     if Author.is_employee is True:
                         ModResponded += 1
                         continue
-                    if Author == 'OurRobotOverlord' and mail.messages == 1:
-                        print('OurRobotOverlord message; ignoring')
+                    if Author == 'OurRobotOverlord' and mail.num_messages == 1:
+                        #print('OurRobotOverlord message; ignoring')
+                        ModResponded += 1
                         mail.archive()
                 
                 if ModResponded > 0:
