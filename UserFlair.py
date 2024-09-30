@@ -93,7 +93,7 @@ def doCooldown(UserToCooldown, GoG):
         UserToCooldown = ''
         return
     if "cooldown" in str(next(GoG.flair("{}".format(UserToCooldown)))['flair_text']).lower():
-        GoG.modmail.create(f"{UserToCooldown} triggered cooldown twice; flair check", 'JpsCrazy')
+        GoG.modmail.create("Possible Cooldown Issue", f"{UserToCooldown} triggered cooldown twice; flair check", 'JpsCrazy')
         UserToCooldown = ''
         return
     
@@ -108,7 +108,7 @@ def doCooldown(UserToCooldown, GoG):
 
 
     if UserToCooldown in GoG.wiki["cooldownlog"].content_md:
-        GoG.modmail.create(f"{UserToCooldown} triggered cooldown twice; username check", 'JpsCrazy')
+        GoG.modmail.create("Possible Cooldown Issue", f"{UserToCooldown} triggered cooldown twice; username check", 'JpsCrazy')
         UserToCooldown = ''
         return
 
@@ -191,7 +191,7 @@ def FlairAssigner(User, Giftee, comment, parent, GoG):
                     FlairCSS = FlairInfo.group(6)
                     print("Updating", str(Giftee) + "'s", "flair while on cooldown")
                     UpdatedCooldownFlair = str(Giftee) + " " + str(GiftedFlair) + "Grabbed " + str(GrabbedNum) + " || " + str(FlairCSS) + " || " + str(CooldownDate)
-                    WikiContent = str(WikiContent).replace(Line,UpdatedCooldownFlair).replace("\n\n\n","\n\n")
+                    WikiContent = str(WikiContent).replace(line,UpdatedCooldownFlair).replace("\n\n\n","\n\n")
                     WikiUpdateReason = str("Updating " + Giftee)
                     Wiki.edit(content=WikiContent, reason=WikiUpdateReason)
             break
