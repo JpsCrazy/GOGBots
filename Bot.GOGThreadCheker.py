@@ -44,6 +44,7 @@ while True:
             Giftee = GOGLine.group(2)
             Gift = GOGLine.group(3)
             Platform = GOGLine.group(4)
+            GOGThreadLogCopy = str(GoG.wiki["gogthreadlog"].content_md)
 
             GiftDate = datetime.strptime(GOGLine.group(5), '%d/%m/%Y')
             GiftDateBacklog = GiftDate + timedelta(HistoryBackdateDays)
@@ -54,20 +55,24 @@ while True:
 
 ##                    print("Checking", Giftee, "for", Gift, "from", Gifter)           
 ##                        print("Checking server ban list")
-            GiftLogError = Giftee + ' received ' + Gift + ' from ' + Gifter + ' ERROR'
+            GiftLogBanned = Giftee + ' received ' + Gift + ' from ' + Gifter + ' BANNED'
             if any(reddit.subreddit("GiftofGames").banned(redditor=Giftee)):
                 # print(Giftee, "is banned.")
-                WikiWrite.WriteWiki("gogthreadlog", GiftLogError, GoG)
+                WikiWrite.WriteWiki("gogthreadlog", GiftLogBanned, GoG)
+                continue
+            if GiftLogBanned in GOGThreadLogCopy:
                 continue
 
+            GiftLogError = Giftee + ' received ' + Gift + ' from ' + Gifter + ' ERROR'
             if ValidUser.ValidUserCheck(reddit, Giftee) != 1:
                 WikiWrite.WriteWiki("gogthreadlog", GiftLogError, GoG)
+                continue
+            if GiftLogError in GOGThreadLogCopy:
                 continue
 
             GifteeLinked = re.search (r'(?i)reddit\.com/(?:u|user)/(\S*)/|\)', Giftee)
             if GifteeLinked is not None:
                 Giftee = GifteeLinked.group(1).replace("\\","")
-            
                    
             try:
 ##               print(Giftee, "not banned; proceeding.")
@@ -90,17 +95,14 @@ while True:
                 GOGLineRemindedEscaped = re.escape(GOGLineReminded)
                 GOGLineRemindedwDate = GOGLineReminded + ' ' + str(Today)
                 
-                if GOGLineFound in GoG.wiki["gogthreadlog"].content_md:
-                    continue
-
-                if GiftLogError in GoG.wiki["gogthreadlog"].content_md:
+                if GOGLineFound in GOGThreadLogCopy:
                     continue
                 
                 if GOGFound == True:
                     WikiWrite.WriteWiki("gogthreadlog", GOGLineFound, GoG)
                     continue
 
-                RemindDateSearch = re.search(fr"(?i){GOGLineRemindedEscaped} (\d\d\d\d-\d\d-\d\d).*?\n", GoG.wiki["gogthreadlog"].content_md)
+                RemindDateSearch = re.search(fr"(?i){GOGLineRemindedEscaped} (\d\d\d\d-\d\d-\d\d).*?\n", GOGThreadLogCopy)
                 if RemindDateSearch is not None:
                     RemindDate = datetime.strptime(RemindDateSearch.group(1), '%Y-%m-%d')
                     SevenDaysAfter = RemindDate + timedelta(days=4)
@@ -114,7 +116,7 @@ while True:
                 elif Today > ThreeDaysAfter:
                     try:
                         print("No GOG thread for", Gifter, "by", Giftee, "found. Sending reminder.")
-                        reddit.subreddit("GiftofGames").modmail.create("Reminder to post [GOG] thread", "As a reminder, all gifts received on this subreddit require you to post a [GOG] thank you thread ***with the gifter's username in the title***. ([GOG] stands for GiftofGames; this is not solely for gog.com games) \n\nNo [GOG] thank you thread to {} for {} found. Failure to post one will result in a ban. \n\nNo response to this message is needed unless you believe it was made in error. This message was sent by a bot.".format(Gifter,Gift), "{}".format(Giftee))
+                        reddit.subreddit("GiftofGames").modmail.create(subject="Reminder to post [GOG] thread", body="As a reminder, all gifts received on this subreddit require you to post a [GOG] thank you thread ***with the gifter's username in the title***. ([GOG] stands for GiftofGames; this is not solely for gog.com games) \n\nNo [GOG] thank you thread to {} for {} found. Failure to post one will result in a ban. \n\nNo response to this message is needed unless you believe it was made in error. This message was sent by a bot.".format(Gifter,Gift), recipient="{}".format(Giftee))
                         if Giftee == "Nikhilkumar_001":
                             print(Giftee + '\n ' + 'GOGLineReminded' + '\n ' + GoG.wiki["gogthreadlog"].content_md)
                         WikiWrite.WriteWiki("gogthreadlog", GOGLineRemindedwDate, GoG)

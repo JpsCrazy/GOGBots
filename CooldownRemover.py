@@ -27,15 +27,13 @@ def CooldownRemover(reddit, GoG):
             CooldownDate = datetime.datetime.strptime(CooldownInfo.group(4), "%Y-%m-%d")
             Today = datetime.datetime.today()
             TimeDiff = (Today - CooldownDate).days
-            Voided = ValidUser.ValidUserCheck(reddit, User)
+            Voided = int(ValidUser.ValidUserCheck(reddit, User))
             # print(Voided, User)
-            if Voided == 0:
-                print(User, "not found, removing from log")
-                Line = str(CooldownInfo.group(0).strip())
-                RemoveLog(WikiContent, line)
+            if Voided == 3:
+                print(User, "suspended, skipping")
                 continue
-            if Voided == 2:
-                print(User, "ERROR!")
+            if Voided != 1:
+                print(User, "not found, removing from log")
                 Line = str(CooldownInfo.group(0).strip())
                 RemoveLog(WikiContent, line)
                 continue
