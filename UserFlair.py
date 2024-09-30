@@ -93,7 +93,7 @@ def doCooldown(UserToCooldown, GoG):
         UserToCooldown = ''
         return
     if "cooldown" in str(next(GoG.flair("{}".format(UserToCooldown)))['flair_text']).lower():
-        GoG.modmail.create("Possible Cooldown Issue", f"{UserToCooldown} triggered cooldown twice; flair check", 'JpsCrazy')
+        GoG.modmail.create(subject="Possible Cooldown Issue", body=f"{UserToCooldown} triggered cooldown twice; flair check", recipient='JpsCrazy')
         UserToCooldown = ''
         return
     
@@ -108,7 +108,7 @@ def doCooldown(UserToCooldown, GoG):
 
 
     if UserToCooldown in GoG.wiki["cooldownlog"].content_md:
-        GoG.modmail.create("Possible Cooldown Issue", f"{UserToCooldown} triggered cooldown twice; username check", 'JpsCrazy')
+        GoG.modmail.create(subject="Possible Cooldown Issue", body=f"{UserToCooldown} triggered cooldown twice; flair check", recipient='JpsCrazy')
         UserToCooldown = ''
         return
 
@@ -122,7 +122,7 @@ def doCooldown(UserToCooldown, GoG):
         print(str(UserToCooldown) + " is being put on cooldown")
         WikiWrite.WriteWiki("cooldownlog", str(CooldownLine), GoG)
         GoG.flair.set(UserToCooldown, text='Cooldown', css_class='cooldown')
-        GoG.modmail.create("Being put on cooldown in r/GiftofGames", "You have been put on a cooldown after receiving a number of games in a relatively short span of time. \n\nYou may still particpate on the subreddit, however you will be unable to enter an [OFFER] or make a [REQUEST] for 30 days. \n\nThis action was performed by a bot. Please reply to this message if you believe this action was made in error.", UserToCooldown)
+        GoG.modmail.create(subject="Being put on cooldown in r/GiftofGames", body="You have been put on a cooldown after receiving a number of games in a relatively short span of time. \n\nYou may still particpate on the subreddit, however you will be unable to enter an [OFFER] or make a [REQUEST] for 30 days. \n\nThis action was performed by a bot. Please reply to this message if you believe this action was made in error.", recipient=UserToCooldown)
     except Exception as e:
         print(time.strftime("%H:%M"),' Exception:', e, traceback.format_exc())
 
