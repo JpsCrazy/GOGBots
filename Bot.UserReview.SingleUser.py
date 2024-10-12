@@ -1,4 +1,4 @@
-User = 'whybeingparanoid'
+User = ''
 KarmaOrGiveaway = 'Giveaway'
 
 import traceback
