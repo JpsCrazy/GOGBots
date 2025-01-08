@@ -77,14 +77,63 @@ def doFlair(gifter,gifted,comment,GoG):
             rclass="n64"
         elif rcount > 29:
             rclass="gamecube"
-    GoG.flair.set(gifted ,newreceiverflair,rclass)
-#     print("Receiver " + gifted + "'s, new flair is " + newreceiverflair + " with flair class " + rclass)
-    #Sort out flair classes for both the receiver and gifter
+    
+    elif "Cooldown" in receiverflair:
+        Wiki = GoG.wiki["cooldownlog"]
+        WikiContent = Wiki.content_md.strip()
+        WikiContent = str(WikiContent).replace("\n\n\n","\n\n")
+        for line in WikiContent.splitlines():
+            if line is None:
+                break
+            if len(line) == 0: #if line is empty, skip
+                #print('Empty line, skipping')
+                continue
+            if str(gifted).lower() in str(line).lower():
+                print(str(line))
+                FlairInfo = re.search(r"(?i)(\S*?) ((Gifted){0,1} {0,1}\|{0,1} {0,1}(Grabbed){0,1} {0,1}(\d{0,3})) \|\| (.*) \|\| (\d*-\d*-\d*)", str(line))
+                if FlairInfo is not None:
+                    print('Found ' + gifted)
+                    CooldownUser = FlairInfo.group(1)
+                    CooldownDate = FlairInfo.group(7)
+                    if FlairInfo.group(3) is not None:
+                        GiftedFlair = FlairInfo.group(3) + " | "
+                    else:
+                        GiftedFlair = ""
+                    GrabbedNum = int(str(FlairInfo.group(5)).replace("+",""))+1
+                    FlairCSS = FlairInfo.group(6)
+                    print("Updating", str(gifted) + "'s", "flair while on cooldown")
+                    newreceiverflair = GiftedFlair + " Grabbed " + str(GrabbedNum)
+                    UpdatedCooldownFlair = str(gifted) + " " + str(GiftedFlair) + "Grabbed " + str(GrabbedNum) + " || " + str(FlairCSS) + " || " + str(CooldownDate)
+                    WikiContent = str(WikiContent).replace(line,UpdatedCooldownFlair).replace("\n\n\n","\n\n")
+                    WikiUpdateReason = str("Updating " + gifted)
+                    Wiki.edit(content=WikiContent, reason=WikiUpdateReason)
+                    comment.reply(str(gifter) + " gifted " + str(gifted) + "who's new flair is " + str(newreceiverflair) + " but is currently on a cooldown.")
+                else:
+                    print(str(gifted) + " on cooldown but error occurred while updating")
+                    # BUG: cooldown flair not properly updated. Unsure why - not finding the gift?
+                    comment.reply(str(gifter) + " gifted " + str(gifted) + " but an error occurred while updating the receiver's flair. u/JpsCrazy please see above.")
+                    return
+            continue
 
-    comment.reply(str(gifter) + " gifted " + str(gifted) + " whose new flair is " + str(newreceiverflair))
+    #BUG: This is a terrible way to code this
+    if receiverflair!="" and receiverflair is not None:
+        if "Cooldown" not in receiverflair:
+            GoG.flair.set(gifted,newreceiverflair,rclass)
+        #     print("Receiver " + gifted + "'s, new flair is " + newreceiverflair + " with flair class " + rclass)
+            #Sort out flair classes for both the receiver and gifter
+
+            comment.reply(str(gifter) + " gifted " + str(gifted) + " whose new flair is " + str(newreceiverflair))
+
+    if receiverflair=="" or receiverflair is None:
+        GoG.flair.set(gifted,newreceiverflair,rclass)
+    #     print("Receiver " + gifted + "'s, new flair is " + newreceiverflair + " with flair class " + rclass)
+        #Sort out flair classes for both the receiver and gifter
+
+        comment.reply(str(gifter) + " gifted " + str(gifted) + " whose new flair is " + str(newreceiverflair))
+
 
 def doCooldown(UserToCooldown, GoG):
-    #!!! should really pass reddit down instead of re-creating it
+    # BUG: should really pass reddit down instead of re-creating it
     reddit = praw.Reddit('GOGUserHistoryBot', user_agent='GOGUserHistoryBot_1.9')
     if ValidUser.ValidUserCheck(reddit, UserToCooldown) != 1:
         UserToCooldown = ''
@@ -151,47 +200,20 @@ def CooldownChecker(User, UserPostHistory, GoG, RecentGOGPosts=0):
             RecentGOGPosts = RecentGOGPosts+1
             if RecentGOGPosts >= 3:
                 if "cooldown" not in str(next(GoG.flair("{}".format(User)))['flair_text']).lower():
-                    print("Putting", str(User), "on cooldown")
+                    # print("Putting", str(User), "on cooldown")
                     doCooldown(str(User), GoG)
 
 def FlairAssigner(User, Giftee, comment, parent, GoG):
     ###--Assigns user flair from !gift commands
-    if "cooldown" not in str(next(GoG.flair("{}".format(Giftee)))['flair_text']).lower():
-        LinkFlairText = parent.parent().link_flair_text
-        if LinkFlairText=="REQUEST" or LinkFlairText=="CLOSED REQUEST":
-            parent.parent().flair.select("a02ee300-3db4-11eb-9965-0e3501162567")
-            doFlair(str(User),str(parent.parent().author), comment, GoG)
-            ##NEEDED: enable cooldown on Requests, below
-            ##doCooldown(parent.parent().author, GoG)
-            
-        elif LinkFlairText=="OFFER" or LinkFlairText=="CLOSED OFFER":
-            doFlair(str(User),(str(Giftee)), comment, GoG)
-            
-        elif LinkFlairText=="GOG":
-            doFlair(str(User),str(parent.parent().author), comment, GoG)
-
-    else:
-        ###--If user already on Cooldown, update backed up flair instead of current flair
-        Wiki = GoG.wiki["cooldownlog"]
-        WikiContent = Wiki.content_md.strip()
-        WikiContent = str(WikiContent).replace("\n\n\n","\n\n")
-        for line in WikiContent.splitlines():
-            if len(line) == 0: #if line is empty, skip
-                continue
-            if str(Giftee).lower() in str(line).lower():
-                FlairInfo = re.search(r"(?i)(.*?) ((Gifted){0,1} {0,1}\|{0,1} {0,1}(Grabbed){0,1} {0,1}(\d{0,3})) \|\| (.*) \|\| (\d*-\d*-\d*)", str(line))
-                if FlairInfo is not None:
-                    CooldownUser = FlairInfo.group(1)
-                    CooldownDate = FlairInfo.group(7)
-                    if FlairInfo.group(3) is not None:
-                        GiftedFlair = FlairInfo.group(3) + " | "
-                    else:
-                        GiftedFlair = ""
-                    GrabbedNum = int(str(FlairInfo.group(5)).replace("+",""))+1
-                    FlairCSS = FlairInfo.group(6)
-                    print("Updating", str(Giftee) + "'s", "flair while on cooldown")
-                    UpdatedCooldownFlair = str(Giftee) + " " + str(GiftedFlair) + "Grabbed " + str(GrabbedNum) + " || " + str(FlairCSS) + " || " + str(CooldownDate)
-                    WikiContent = str(WikiContent).replace(line,UpdatedCooldownFlair).replace("\n\n\n","\n\n")
-                    WikiUpdateReason = str("Updating " + Giftee)
-                    Wiki.edit(content=WikiContent, reason=WikiUpdateReason)
-            break
+    LinkFlairText = parent.parent().link_flair_text
+    if LinkFlairText=="REQUEST" or LinkFlairText=="CLOSED REQUEST":
+        parent.parent().flair.select("a02ee300-3db4-11eb-9965-0e3501162567")
+        doFlair(str(User),str(parent.parent().author), comment, GoG)
+        ##NEEDED: enable cooldown on Requests, below
+        ##doCooldown(parent.parent().author, GoG)
+        
+    elif LinkFlairText=="OFFER" or LinkFlairText=="CLOSED OFFER":
+        doFlair(str(User),(str(Giftee)), comment, GoG)
+        
+    elif LinkFlairText=="GOG":
+        doFlair(str(User),str(parent.parent().author), comment, GoG)

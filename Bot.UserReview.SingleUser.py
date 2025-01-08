@@ -1,5 +1,6 @@
 User = ''
 KarmaOrGiveaway = 'Giveaway'
+#Enter "Karma" or "Giveaway"
 
 import traceback
 import time
@@ -79,7 +80,7 @@ if KarmaOrGiveaway == 'Giveaway':
                 GOGThread = re.search(rf'(?i)(?<!offer_gog)(?<!offergog)GOG', post.permalink)
                 if GOGThread is not None:
                     continue
-                print(post.author, post.subreddit, post.id, GiveawaySubCount)   ##Debug line to track which post is being checked and total count
+                print(post.author, post.subreddit, post.permalink, GiveawaySubCount)   ##Debug line to track which post is being checked and total count
                 if hasattr(post, '_submission'): #This checks COMMENTS even though it is unintuitive
                     if post.is_submitter == True: #skip comments on own post
                         continue

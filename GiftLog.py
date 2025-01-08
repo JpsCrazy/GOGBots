@@ -37,7 +37,7 @@ def GiftCheck(BodyText, comment, User, parent, reddit, GoG):
                 if "flair" in str(reply.body).lower() or "gifted" in str(reply.body).lower():
                     AlreadyFlaired = True
     if AlreadyFlaired == True:
-        print("Gift flair already processed")
+        #print("Gift flair already processed")
         return
     Gift = re.findall(r'(?i)!gift\s*/?(?:u/)?(\S*)\s*([^\n]*)', str(BodyText))
     if str(Gift) != "[]":
@@ -52,15 +52,20 @@ def GiftCheck(BodyText, comment, User, parent, reddit, GoG):
             if Giftee is None:
                 print("Gift but no giftee; probable error")
                 continue
-            GifteeLinked = re.search (r'(?i)reddit\.com/(?:u|user)/(\S*)/|\)', Giftee)
+            GifteeLinked = re.search (r'(?i)(?:\[(.*)\]\()?reddit\.com/(?:u|user)/(\S*?)(?:/|\)| |$)', Giftee)
             if GifteeLinked is not None:
-                Giftee = GifteeLinked.group(1).replace("\\","")
+                if GifteeLinked.group(1) != GifteeLinked.group(2):
+                    print(str(User), "attempted to gift", str(GifteeLinked.group(1)), "but linked to", str(GifteeLinked.group(2)), "and was skipped")
+                    comment.reply("Unable to process flair; " + str(GifteeLinked.group(1)) + " was typed as the receiver but was linked to " + str(GifteeLinked.group(2) + ". Please double check your spelling and try again. \n\nPlease [contact the moderators](https://www.reddit.com/message/compose?to=%2Fr%2FGiftofGames) if you believe this action was made in error."))
+                    continue 
+                Giftee = GifteeLinked.group(2).replace("\\","")
             if ValidUser.ValidUserCheck(reddit, Giftee) == 0:
                 print(str(User), "attempted to gift", str(Giftee), "but they do not exist")
-                comment.reply("Unable to flair u/" + str(Giftee) + " as their profile does not seem to exist. Please double check your spelling and try again. \n\nPlease [contact the moderators](https://www.reddit.com/message/compose?to=%2Fr%2FGiftofGames) if you believe this action was made in error.")
+                comment.reply("Unable to flair for" + str(Giftee) + " as their profile does not seem to exist. Please double check your spelling and try again. \n\nPlease [contact the moderators](https://www.reddit.com/message/compose?to=%2Fr%2FGiftofGames) if you believe this action was made in error.")
                 continue 
             if User == Giftee.lower():
                 print(User + " attempted to gift to themself; ignoring")
+                comment.reply("It appears you attempted to gift yourself. Please double check your comment and try again. \n\nPlease [contact the moderators](https://www.reddit.com/message/compose?to=%2Fr%2FGiftofGames) if you believe this action was made in error.")
                 continue
 
             # print(User, Giftee, GiftItem)

@@ -37,7 +37,7 @@ def RepostCheck(reddit, User, SubmissionDate, PostID, RequestOrComment="Request"
                     RequestTimeCheckDaysHours = math.floor((RequestTimeCheckDaysMinutes / 60))
                     RequestTimeCheckDaysMinutes -= RequestTimeCheckDaysHours*60
                     RequestTime = str((str(RequestTimeCheckDaysHours) + " hours and " + str(RequestTimeCheckDaysMinutes) + " minutes old."))
-                    print(User, "posted new Request while last post is", RequestTime, "Removing post.", post.id)                    
+                    print(User, "new Request removed as prior is", RequestTime, post.id)                    
                     RemovalReason = "Request Limit"
                     Remover.GeneralRemove(RequestOrComment, PostID, RemovalReason, RequestTime)
 

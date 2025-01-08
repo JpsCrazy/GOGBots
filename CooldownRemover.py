@@ -9,7 +9,7 @@ import traceback
 import ValidUser
 
 def RemoveLog(WikiContent, Line):
-    WikiContent = str(WikiContent).replace(Line,"").replace("\n\n\n","\n\n")
+    WikiContent = str(WikiContent).replace(str(Line),"").replace("\n\n\n","\n\n")
     return WikiContent
 
 def CooldownRemover(reddit, GoG):
@@ -30,11 +30,10 @@ def CooldownRemover(reddit, GoG):
             Voided = int(ValidUser.ValidUserCheck(reddit, User))
             # print(Voided, User)
             if Voided == 3:
-                print(User, "suspended, skipping")
+                # print(User, "suspended, skipping")
                 continue
             if Voided != 1:
                 print(User, "not found, removing from log")
-                Line = str(CooldownInfo.group(0).strip())
                 RemoveLog(WikiContent, line)
                 continue
 
