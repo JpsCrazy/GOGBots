@@ -16,15 +16,15 @@ def writeGiftLog(Gifter, Giftee, GiftItem, Platform, Day, Month, Year, GoG):
     except Exception as e:
             print("writeGiftLog():", e, traceback.format_exc())
             
-def writeGiftLogDB(Gifter, Giftee, GiftItem, Platform, Day, Month, Year):
-    try:
-        ##database support
-        if "'" in GiftItem:
-            GiftItem = GiftItem.replace("'",r"\'")
-        dbcursor.execute("INSERT INTO GiftLog VALUES('%s', '%s', '%s', '%s', '%s');" % (str(Giftee), str(GiftItem)[0:127], str(Gifter), str(Platform), (Year + "-" + Month + "-" + Day)))
-        mydb.commit();
-    except Exception as e:
-            print("writeGiftLogDB():", e, traceback.format_exc())
+# def writeGiftLogDB(Gifter, Giftee, GiftItem, Platform, Day, Month, Year):
+#    try:
+#        ##database support
+#        if "'" in GiftItem:
+#            GiftItem = GiftItem.replace("'",r"\'")
+#        dbcursor.execute("INSERT INTO GiftLog VALUES('%s', '%s', '%s', '%s', '%s');" % (str(Giftee), str(GiftItem)[0:127], str(Gifter), str(Platform), (Year + "-" + Month + "-" + Day)))
+#        mydb.commit();
+#    except Exception as e:
+#            print("writeGiftLogDB():", e, traceback.format_exc())
 
 def GiftCheck(BodyText, comment, User, parent, reddit, GoG):
 ###--Checks for !gift commands
@@ -51,7 +51,7 @@ def GiftCheck(BodyText, comment, User, parent, reddit, GoG):
             GiftItem = str(Gift[GiftCommandNum][1])
             if Giftee is None:
                 print("Gift but no giftee; probable error")
-                comment.reply("Unable to process flair; no giftee found. Please double check your formatting and try again. \n\nPlease [contact the moderators](https://www.reddit.com/message/compose?to=%2Fr%2FGiftofGames) if you believe this action was made in error."))
+                comment.reply("Unable to process flair; no giftee found. Please double check your formatting and try again. \n\nPlease [contact the moderators](https://www.reddit.com/message/compose?to=%2Fr%2FGiftofGames) if you believe this action was made in error.")
                 continue
             GifteeLinked = re.search (r'(?i)(?:\[(?:u/)?(.*)\]\().*?reddit\.com/(?:u|user)/(\S*?)(?:/|\)| |$)', Giftee)
             if GifteeLinked is not None:
