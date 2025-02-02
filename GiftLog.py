@@ -51,14 +51,19 @@ def GiftCheck(BodyText, comment, User, parent, reddit, GoG):
             GiftItem = str(Gift[GiftCommandNum][1])
             if Giftee is None:
                 print("Gift but no giftee; probable error")
+                comment.reply("Unable to process flair; no giftee found. Please double check your formatting and try again. \n\nPlease [contact the moderators](https://www.reddit.com/message/compose?to=%2Fr%2FGiftofGames) if you believe this action was made in error."))
                 continue
-            GifteeLinked = re.search (r'(?i)(?:\[(.*)\]\()?reddit\.com/(?:u|user)/(\S*?)(?:/|\)| |$)', Giftee)
+            GifteeLinked = re.search (r'(?i)(?:\[(?:u/)?(.*)\]\().*?reddit\.com/(?:u|user)/(\S*?)(?:/|\)| |$)', Giftee)
             if GifteeLinked is not None:
-                if GifteeLinked.group(1) != GifteeLinked.group(2):
+                if GifteeLinked.group(1) is None: 
+                    Giftee = GifteeLinked.group(2).replace("\\","") 
+                elif GifteeLinked.group(1) != GifteeLinked.group(2):
                     print(str(User), "attempted to gift", str(GifteeLinked.group(1)), "but linked to", str(GifteeLinked.group(2)), "and was skipped")
                     comment.reply("Unable to process flair; " + str(GifteeLinked.group(1)) + " was typed as the receiver but was linked to " + str(GifteeLinked.group(2) + ". Please double check your spelling and try again. \n\nPlease [contact the moderators](https://www.reddit.com/message/compose?to=%2Fr%2FGiftofGames) if you believe this action was made in error."))
-                    continue 
-                Giftee = GifteeLinked.group(2).replace("\\","")
+                    continue
+                else:
+                    Giftee = GifteeLinked.group(2).replace("\\","") 
+                
             if ValidUser.ValidUserCheck(reddit, Giftee) == 0:
                 print(str(User), "attempted to gift", str(Giftee), "but they do not exist")
                 comment.reply("Unable to flair for" + str(Giftee) + " as their profile does not seem to exist. Please double check your spelling and try again. \n\nPlease [contact the moderators](https://www.reddit.com/message/compose?to=%2Fr%2FGiftofGames) if you believe this action was made in error.")
