@@ -1,5 +1,5 @@
-User = ''
-KarmaOrGiveaway = 'Giveaway'
+User = 'DryCategory6490'
+KarmaOrGiveaway = 'Karma'
 #Enter "Karma" or "Giveaway"
 
 import traceback
@@ -31,7 +31,7 @@ if KarmaOrGiveaway == 'Karma':
             else:
                 VisibleKarma = VisibleKarma + comment.score
                 ##Below is search for comments from subs for Free karma; variable as at top of file for easy access
-                if str(comment.subreddit) in KarmaSubs:
+                if str(comment.subreddit) in KarmaSubs and str(comment.subreddit) != 'arma':
                     print(KarmaSubs, comment.score)    ##Debug line to track fake karma obtained from a specific post
                     
                     ##Below updates how much karma Requester has gotten from Karma subs

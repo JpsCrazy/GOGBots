@@ -216,4 +216,10 @@ def FlairAssigner(User, Giftee, comment, parent, GoG):
         doFlair(str(User),(str(Giftee)), comment, GoG)
         
     elif LinkFlairText=="GOG":
-        doFlair(str(User),str(parent.parent().author), comment, GoG)
+        if Giftee is not None:
+            doFlair(str(User),str(Giftee), comment, GoG)
+        else:
+            if str(User).lower() == str(parent.parent().author).lower():
+                comment.reply("It appears you attempted to gift yourself. Please double check your comment and try again. \n\nPlease [contact the moderators](https://www.reddit.com/message/compose?to=%2Fr%2FGiftofGames) if you believe this action was made in error.")
+            else:
+                doFlair(str(User),str(parent.parent().author), comment, GoG)

@@ -15,7 +15,7 @@ def HistoryKarmaCheck(User, UserComments, KarmaSubs, RequestOrComment, PostID, V
             else:
                 VisibleKarma = VisibleKarma + comment.score
                 ##Below is search for comments from subs for Free karma; variable as at top of file for easy access
-                if str(comment.subreddit) in KarmaSubs:
+                if str(comment.subreddit) in KarmaSubs and str(comment.subreddit) != 'arma':
     ##                print(KarmaSubs, comment.score)    ##Debug line to track fake karma obtained from a specific post
                     
                     ##Below updates how much karma Requester has gotten from Karma subs
@@ -60,33 +60,38 @@ def HistoryGiveawayCheck(User, UserGiveawayHistory, GiveawaySubs, RequestOrComme
                 continue
             TotalSubCount = TotalSubCount + 1
     ##        print(post.author, post.subreddit)    ##Debug line to track it's reading subreddits from user history
-            GiveawaySub = re.search(rf'(?i)^({GiveawaySubs})$', str(post.subreddit))
-            if GiveawaySub is not None and "discussion" not in post.permalink and "intro" not in post.permalink and "announcement" not in post.permalink and "gog" not in post.permalink:
-                if "meta" in post.permalink and "Steam_Giveaway" in str(post.subreddit).lower():
+            if str(post.subreddit) not in GiveawaySubs:
+                continue
+            GiveawaySub = str(post.subreddit)
+            if "discussion" in post.permalink:
+                continue
+            if "intro" in post.permalink:
+                continue
+            if "announcement" in post.permalink:
+                continue
+            if "gog" in post.permalink and "request" not in post.permalink and "offer" not in post.permalink:
+                continue
+            if "meta" in post.permalink and "Steam_Giveaway" in str(post.subreddit).lower():
+                continue
+##            print(post.author, post.subreddit, post.id, GiveawaySubCount)   ##Debug line to track which post is being checked and total count
+            if hasattr(post, '_submission'): #This checks COMMENTS even though it is unintuitive
+                if post.is_submitter == True: #Skips comments on own post
                     continue
-                GOGThread = re.search(rf'(?i)(?<!offer_gog)(?<!offergog)GOG', post.permalink)
-                if GOGThread is not None:
+                if "request" in str(post.permalink).lower():
                     continue
-    ##            print(post.author, post.subreddit, post.id, GiveawaySubCount)   ##Debug line to track which post is being checked and total count
-                if hasattr(post, '_submission'): #This checks COMMENTS even though it is unintuitive
-                    if post.is_submitter == True: #Skips comments on own post
-                        continue
-                    RequestReply = re.search(rf'(?i)REQUEST', post.permalink)
-                    if RequestReply is not None:
-                        continue
-                    global CommentBody
-                    CommentBody = post.body
-                    RootComment = post.is_root
-                    if RootComment is False:
-                        continue
-                    if "not entering" in CommentBody or "not participating" in CommentBody or "not taking part" in CommentBody:
-        ##                print("User not participating - skipping", post.author, GiveawaySubCount)   ##Debug line to track comments being omitted from GiveawaySubCount
-                        continue
-                else: #Checks requests
-                    if post.removed_by_category != None: #if submission removed, un-count it
-                        TotalSubCount = TotalSubCount - 1
-                    RootComment = True
-                GiveawaySubCount = GiveawaySubCount + 1
+                global CommentBody
+                CommentBody = post.body
+                RootComment = post.is_root
+                if RootComment is False:
+                    continue
+                if "not entering" in CommentBody or "not participating" in CommentBody or "not taking part" in CommentBody:
+    ##                print("User not participating - skipping", post.author, GiveawaySubCount)   ##Debug line to track comments being omitted from GiveawaySubCount
+                    continue
+            else: #Checks requests
+                if post.removed_by_category != None: #if submission removed, un-count it
+                    TotalSubCount = TotalSubCount - 1
+                RootComment = True
+            GiveawaySubCount = GiveawaySubCount + 1
                 
         GiveawaySubText = str(str(User) + " has " + str(GiveawaySubCount) + " giveaway posts out of " + str(TotalSubCount))
         if TotalSubCount < NumRecentPostThreshhold:
