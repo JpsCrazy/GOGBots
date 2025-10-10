@@ -39,7 +39,7 @@ def GiftCheck(BodyText, comment, User, parent, reddit, GoG):
     if AlreadyFlaired == True:
         #print("Gift flair already processed")
         return
-    Gift = re.findall(r'(?i)!gift\s*/?(?:u/)?(\S*)\s*([^\n]*)', str(BodyText))
+    Gift = re.findall(r'(?i)!gift\s*\[?/?(?:u/)?\[?([\w-]*)(?:\]\(\S*?\))?\s*([^\n]*)', str(BodyText))
     if str(Gift) != "[]":
         GiftCommandNum = -1
         for GiftCommand in Gift:

@@ -1,5 +1,6 @@
 *.txt
 *.pyc
 praw.ini
+SteamAPIKey
 SteamAPIKey.py
 ReceiversGamingPlatformWITHCLASS.py

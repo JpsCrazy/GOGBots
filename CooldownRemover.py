@@ -20,7 +20,7 @@ def CooldownRemover(reddit, GoG):
         for line in WikiContent.splitlines():
             if len(line) == 0: #if line is empty, skip
                 continue
-            CooldownInfo = re.search(rf"(?i)([^\s]*) (.*) \|\| ([^\s]*) \|\| (\d\d\d\d-\d\d-\d\d)", line)
+            CooldownInfo = re.search(rf"(?i)([^\s]*) (.*) \|\| ([^\s]*)(?: \w*)? \|\| (\d\d\d\d-\d\d-\d\d)", line)
             User = CooldownInfo.group(1)
             FlairText = CooldownInfo.group(2)
             FlairCSS = CooldownInfo.group(3)

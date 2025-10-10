@@ -15,7 +15,7 @@ import ValidUser
 BanLength = 31
 HistoryBackdateDays = 30
 
-reddit = praw.Reddit('GOGThreadChecker', user_agent='GOGThreadChecker')
+reddit = praw.Reddit('GOGThreadChecker', user_agent='GOGThreadChecker_3.1')
 GoG = reddit.subreddit("GiftofGames")
 
 print("Starting GOG Thread Checker bot...")
@@ -24,6 +24,7 @@ while True:
     try:
         Wiki = reddit.subreddit('GiftofGames').wiki['giftlog']
         Today = datetime.today()
+        GOGThreadLogCopy = str(GoG.wiki["gogthreadlog"].content_md)
         for line in Wiki.content_md.splitlines():
             line = line.strip()
             GOGLine = re.search('(?i)(\S*?) gifted (\S*?) (.*?) for (.*?) on (\d\d/\d\d/\d\d\d\d)$', line)
@@ -44,7 +45,7 @@ while True:
             Giftee = GOGLine.group(2)
             Gift = GOGLine.group(3)
             Platform = GOGLine.group(4)
-            GOGThreadLogCopy = str(GoG.wiki["gogthreadlog"].content_md)
+            
 
             GiftDate = datetime.strptime(GOGLine.group(5), '%d/%m/%Y')
             GiftDateBacklog = GiftDate + timedelta(HistoryBackdateDays)
@@ -138,7 +139,7 @@ while True:
                 else:
                     print(e, Giftee)
 
-        time.sleep(3600)        
+        time.sleep(14400)        
                     
     except Exception as e:
         print(e, Giftee, traceback.format_exc())

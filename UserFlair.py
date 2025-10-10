@@ -17,66 +17,85 @@ def doFlair(gifter,gifted,comment,GoG):
     gcount=0 #count for gifter if they have a grabbed flair as well
     gclass="" #Gifter flair class
     rclass="" #Receiver flair class
+    remoji=""
     
     #The below block of code flairs the gifter based on their current flair
     if gifterflair=="" or gifterflair is None:
-        newgifterflair="Gifted"
-        gclass="gifted2"
+        newgifterflair="Gifted :gifted:"
+        gclass="d71c77b0-369d-11e1-967f-12313d096aae"
         
     elif "Gifted" in gifterflair:
         newgifterflair="No flair change"
-        gclass="gifted2"
     
     elif "Grabbed" in gifterflair:
-        newgifterflair="Gifted | " + gifterflair
-        gcount=int(str(gifterflair.split("Grabbed ")[1]).replace("+",""))
-        if gcount <=9:
-            gclass="giftedgrabbed2"
-        elif gcount <=19:
-            gclass="giftedgrabbed3"
-        elif gcount <=29:
-            gclass="giftedgrabbed4"
+        newgifterflair="Gifted :Gifted: | " + gifterflair
+        gcountsearch=re.search(r"(?i)Grabbed (\d{0,3})", str(gifterflair))
+        gcount=int(gcountsearch.group(1))
+        if gcount is None or gcount == 0:
+            newgifterflair="No flair change"
+            print("Error for Gifter flair; no existingg grabbed count", gifter, giftee, comment)
+        elif gcount <=6:
+            gclass="4833a8ca-93c2-11e6-8e11-0e5c5e976c56"
+        elif gcount <=10:
+            gclass="77692912-93c2-11e6-a71e-0e69ab969334"
+        elif gcount <=16:
+            gclass="7b69d4b2-93c2-11e6-8fb2-0e0d983a7ee7"
+        elif gcount < 30:
+            gclass="c2dbae7e-93c2-11e6-a022-0e6883be649c"
         elif gcount > 29:
-            gclass="giftedgrabbed5"
+            gclass="c697b846-93c2-11e6-b133-0ebe89b429e6"
     
     if newgifterflair!="No flair change":
-        GoG.flair.set(gifter,newgifterflair,gclass)
+        GoG.flair.set(gifter,text=newgifterflair,flair_template_id=gclass)
         
 #     print("Gifter " + gifter + "'s, new flair is " + newgifterflair + " with flair class " + gclass)
 
 #     print(gifted, receiverflair)
     #The below block of code flairs the receiver based on their flair
     if receiverflair=="" or receiverflair is None:
-        newreceiverflair="Grabbed 1"
-        rcount=1
-        rclass="nes"
-    elif receiverflair.replace(" ","")=="Gifted":
-        newreceiverflair= "Gifted | Grabbed 1"
-        rclass="giftedgrabbed2"
-        rcount=1
-    elif "Gifted | Grabbed" in receiverflair:
-        newreceiverflair="Gifted | Grabbed " + str(int(receiverflair.split("Gifted | Grabbed ")[1].replace(" ","").replace("+",""))+1)
-        rcount=int(receiverflair.split("Gifted | Grabbed ")[1].replace(" ","")) + 1
-        if rcount <=9:
-            rclass="giftedgrabbed2"
+        newreceiverflair="Grabbed 1 :Grabbed1-9:"
+        rcount=0
+        rclass="4833a8ca-93c2-11e6-8e11-0e5c5e976c56"
+    elif receiverflair.replace(" ","")=="Gifted" or receiverflair.replace(" ","")=="Gifted:Gifted:":
+        newreceiverflair= "Gifted :Gifted: | Grabbed 1"
+        rclass="f95f90aa-369d-11e1-ab9b-12313d2c1af1"
+        rcount=0
+    
+    elif "Gifted" in receiverflair and "Grabbed" in receiverflair:
+        newreceiverflairsearch=re.search(r"(?i)Grabbed (\d{0,3})", str(receiverflair))
+        rcount=int(newreceiverflairsearch.group(1))+1
+        if rcount is None or rcount == 0:
+            print("Error for Receiver flair; no grabbed count", gifter, giftee, comment)
+            receiverflair=""
+            return
+        elif rcount <=9:
+            rclass="f95f90aa-369d-11e1-ab9b-12313d2c1af1"
+            remoji=":Grabbed1-9:"
         elif rcount <=19:
-            rclass="giftedgrabbed3"
+            rclass="6b1c5d7a-8fce-11e6-8b47-0e93c7828946"
+            remoji=":Grabbed10-19:"
         elif rcount <=29:
-            rclass="giftedgrabbed4"
+            rclass="717f3a48-8fce-11e6-ba41-0ee844677561"
+            remoji=":Grabbed20-29:"
         elif rcount > 29:
-            rclass="giftedgrabbed5"
+            rclass="13c64bc4-93a9-11e6-a5e6-0eda72ca337c"
+            remoji=":Grabbed30andabove:"
+        newreceiverflair="Gifted :Gifted:| Grabbed " + str(rcount) + remoji
             
     elif "Grabbed" in receiverflair:
-        newreceiverflair="Grabbed " + str(int(receiverflair.split("Grabbed ")[1].replace(" ","").replace("+",""))+1)
-        rcount=int(receiverflair.split("Grabbed ")[1].replace(" ",""))+1
-        if rcount <=9:
-            rclass="nes"
-        elif rcount <=19:
-            rclass="snes"
-        elif rcount <=29:
-            rclass="n64"
+        newreceiverflairsearch=re.search(r"(?i)Grabbed (\d{0,3})", str(receiverflair))
+        rcount=int(newreceiverflairsearch.group(1))+1
+        if rcount <6:
+            rclass="4833a8ca-93c2-11e6-8e11-0e5c5e976c56"
+        elif rcount <10:
+            rclass="77692912-93c2-11e6-a71e-0e69ab969334"
+        elif rcount <16:
+            rclass="7b69d4b2-93c2-11e6-8fb2-0e0d983a7ee7"
+        elif rcount < 30:
+            rclass="c2dbae7e-93c2-11e6-a022-0e6883be649c"
         elif rcount > 29:
-            rclass="gamecube"
+            rclass="c697b846-93c2-11e6-b133-0ebe89b429e6"
+        newreceiverflair="Gifted :Gifted:| Grabbed " + str(rcount)
     
     elif "Cooldown" in receiverflair:
         Wiki = GoG.wiki["cooldownlog"]
@@ -90,7 +109,7 @@ def doFlair(gifter,gifted,comment,GoG):
                 continue
             if str(gifted).lower() in str(line).lower():
                 print(str(line))
-                FlairInfo = re.search(r"(?i)(\S*?) ((Gifted){0,1} {0,1}\|{0,1} {0,1}(Grabbed){0,1} {0,1}(\d{0,3})) \|\| (.*) \|\| (\d*-\d*-\d*)", str(line))
+                FlairInfo = re.search(r"(?i)([\w-]*?) ((?:(Gifted) \| )?(?:(Grabbed) (\d{0,3}))?)(?: ?(?:emoji)?:[\w-]*:)? ?\|\| (.*) \|\| (\d*-\d*-\d*)", str(line))
                 if FlairInfo is not None:
                     print('Found ' + gifted)
                     CooldownUser = FlairInfo.group(1)
@@ -99,10 +118,10 @@ def doFlair(gifter,gifted,comment,GoG):
                         GiftedFlair = FlairInfo.group(3) + " | "
                     else:
                         GiftedFlair = ""
-                    GrabbedNum = int(str(FlairInfo.group(5)).replace("+",""))+1
+                    GrabbedNum = int(FlairInfo.group(5).replace("+",""))+1
                     FlairCSS = FlairInfo.group(6)
                     print("Updating", str(gifted) + "'s", "flair while on cooldown")
-                    newreceiverflair = GiftedFlair + " Grabbed " + str(GrabbedNum)
+                    newreceiverflair = str(GiftedFlair) + " Grabbed " + str(GrabbedNum)
                     UpdatedCooldownFlair = str(gifted) + " " + str(GiftedFlair) + "Grabbed " + str(GrabbedNum) + " || " + str(FlairCSS) + " || " + str(CooldownDate)
                     WikiContent = str(WikiContent).replace(line,UpdatedCooldownFlair).replace("\n\n\n","\n\n")
                     WikiUpdateReason = str("Updating " + gifted)
@@ -115,18 +134,11 @@ def doFlair(gifter,gifted,comment,GoG):
                     return
             continue
 
-    #BUG: This is a terrible way to code this
-    if receiverflair!="" and receiverflair is not None:
-        if "Cooldown" not in receiverflair:
-            GoG.flair.set(gifted,newreceiverflair,rclass)
-        #     print("Receiver " + gifted + "'s, new flair is " + newreceiverflair + " with flair class " + rclass)
-            #Sort out flair classes for both the receiver and gifter
-
-            comment.reply(str(gifter) + " gifted " + str(gifted) + " whose new flair is " + str(newreceiverflair))
-
-    if receiverflair=="" or receiverflair is None:
-        GoG.flair.set(gifted,newreceiverflair,rclass)
-    #     print("Receiver " + gifted + "'s, new flair is " + newreceiverflair + " with flair class " + rclass)
+    if newreceiverflair=="" or newreceiverflair is None:
+        return
+    if "Cooldown" not in receiverflair:
+        GoG.flair.set(gifted,text=newreceiverflair,flair_template_id=rclass)
+        print("Receiver " + gifted + "'s, new flair is " + newreceiverflair + " with flair class " + rclass)
         #Sort out flair classes for both the receiver and gifter
 
         comment.reply(str(gifter) + " gifted " + str(gifted) + " whose new flair is " + str(newreceiverflair))
@@ -170,7 +182,7 @@ def doCooldown(UserToCooldown, GoG):
         CooldownLine = str(UserToCooldown) + " " + TextAndCSS + " || " + str(Date)
         print(str(UserToCooldown) + " is being put on cooldown")
         WikiWrite.WriteWiki("cooldownlog", str(CooldownLine), GoG)
-        GoG.flair.set(UserToCooldown, text='Cooldown', css_class='cooldown')
+        GoG.flair.set(UserToCooldown, text='Cooldown', flair_template_id='fc209f40-4a53-11eb-91c6-0e5cd6fe1571')
         GoG.modmail.create(subject="Being put on cooldown in r/GiftofGames", body="You have been put on a cooldown after receiving a number of games in a relatively short span of time. \n\nYou may still particpate on the subreddit, however you will be unable to enter an [OFFER] or make a [REQUEST] for 30 days. \n\nThis action was performed by a bot. Please reply to this message if you believe this action was made in error.", recipient=UserToCooldown)
     except Exception as e:
         print(time.strftime("%H:%M"),' Exception:', e, traceback.format_exc())
