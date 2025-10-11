@@ -20,7 +20,7 @@ def doFlair(gifter,gifted,comment,GoG):
     remoji=""
     
     #The below block of code flairs the gifter based on their current flair
-    if gifterflair=="" or gifterflair is None:
+    if gifterflair=="" or gifterflair is None or 'Gamer' in gifterflair:
         newgifterflair="Gifted :gifted:"
         gclass="d71c77b0-369d-11e1-967f-12313d096aae"
         
@@ -52,7 +52,7 @@ def doFlair(gifter,gifted,comment,GoG):
 
 #     print(gifted, receiverflair)
     #The below block of code flairs the receiver based on their flair
-    if receiverflair=="" or receiverflair is None:
+    if receiverflair=="" or receiverflair is None or 'Gamer' in receiverflair:
         newreceiverflair="Grabbed 1 :Grabbed1-9:"
         rcount=0
         rclass="4833a8ca-93c2-11e6-8e11-0e5c5e976c56"
