@@ -56,7 +56,7 @@ def doFlair(gifter,gifted,comment,GoG):
         newreceiverflair="Grabbed 1 :Grabbed1-9:"
         rcount=0
         rclass="4833a8ca-93c2-11e6-8e11-0e5c5e976c56"
-    elif receiverflair.replace(" ","")=="Gifted" or receiverflair.replace(" ","")=="Gifted:Gifted:":
+    elif "Gifted" in receiverflair and "Grabbed" not in receiverflair:
         newreceiverflair= "Gifted :Gifted: | Grabbed 1"
         rclass="f95f90aa-369d-11e1-ab9b-12313d2c1af1"
         rcount=0
@@ -95,7 +95,7 @@ def doFlair(gifter,gifted,comment,GoG):
             rclass="c2dbae7e-93c2-11e6-a022-0e6883be649c"
         elif rcount > 29:
             rclass="c697b846-93c2-11e6-b133-0ebe89b429e6"
-        newreceiverflair="Gifted :Gifted:| Grabbed " + str(rcount)
+        newreceiverflair="Grabbed " + str(rcount)
     
     elif "Cooldown" in receiverflair:
         Wiki = GoG.wiki["cooldownlog"]
