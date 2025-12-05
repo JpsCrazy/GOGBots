@@ -15,7 +15,7 @@ import ValidUser
 BanLength = 31
 HistoryBackdateDays = 30
 
-reddit = praw.Reddit('GOGThreadChecker', user_agent='GOGThreadChecker_3.1')
+reddit = praw.Reddit('GOGThreadChecker', user_agent='GOGThreadChecker_4.0')
 GoG = reddit.subreddit("GiftofGames")
 
 print("Starting GOG Thread Checker bot...")
@@ -78,13 +78,15 @@ while True:
             try:
 ##               print(Giftee, "not banned; proceeding.")
                 GOGFound = False
-                UserPosts = reddit.redditor("{}".format(Giftee)).submissions.new(limit=500) ##Returns top 500 posts from receiver
+                SearchQuery = f'title:"[GOG]" author:"{Giftee}"'
+                UserPosts = GoG.search(SearchQuery, sort="new", time_filter="month")
+                    #reddit.redditor("{}".format(Giftee)).submissions.new(limit=500) ##Returns top 500 posts from receiver
                 for post in UserPosts:
 ##                    print(post.title)
                     if post is None:
                         continue
 ##                    print(post.title)
-                    GOGThread = re.search(rf'(?i)\[GOG\].*({Gifter}|{GifterEscaped})', post.title)
+                    GOGThread = re.search(rf'(?i)^\s*\[GOG\].*({Gifter}|{GifterEscaped})', post.title)
                     if GOGThread is not None:
 ##                        print(str(post.title), Giftee, Gifter)
                         GOGFound = True

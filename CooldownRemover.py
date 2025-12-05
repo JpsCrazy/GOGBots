@@ -23,7 +23,11 @@ def CooldownRemover(reddit, GoG):
             CooldownInfo = re.search(rf"(?i)([^\s]*) (.*) \|\| ([^\s]*)(?: \w*)? \|\| (\d\d\d\d-\d\d-\d\d)", line)
             User = CooldownInfo.group(1)
             FlairText = CooldownInfo.group(2)
+            if FlairText == "None":
+                FlairText = "Grabbed 3"
             FlairCSS = CooldownInfo.group(3)
+            if FlairCSS == "None":
+                FlairCSS = "grabbed3"
             CooldownDate = datetime.datetime.strptime(CooldownInfo.group(4), "%Y-%m-%d")
             Today = datetime.datetime.today()
             TimeDiff = (Today - CooldownDate).days
@@ -44,7 +48,7 @@ def CooldownRemover(reddit, GoG):
                     pass
                     GoG.flair.set(User, text=FlairText, css_class=FlairCSS)
                     GoG.modmail.create(subject="Removed from cooldown in r/GiftofGames", body=str("Your cooldown has been removed. \n\nYou may now make a [REQUEST] or enter an [OFFER] and your flair has been restored to " + FlairText + ". \n\nThis action was performed by a bot."), recipient=User)
-                    WikiContent = RemoveLog(WikiContent, line.strip())
+                    WikiContent = RemoveLog(WikiContent, str(line.strip()))
                 except Exception as e:
                     print("Error resetting flair for", User, "\n", e, traceback.format_exc())
                     

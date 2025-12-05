@@ -5,7 +5,7 @@ import praw
 import re
 import traceback
 
-reddit = praw.Reddit('GOGCooldownFlairBot', user_agent='GOGCooldownFlairBot')
+reddit = praw.Reddit('GOGCooldownFlairBot', user_agent='GOGCooldownFlairBot_2')
 GoG = reddit.subreddit("GiftofGames")
 
 print("User Reddit Cooldown Flair Checker bot starting...")

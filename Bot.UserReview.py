@@ -53,7 +53,7 @@ PostHistory = 250
 ##username=YOUR_REDDIT_USERNAME
 ##user_agent=GOGUserHistoryBot_2.0
 
-reddit = praw.Reddit('GOGUserHistoryBot', user_agent='GOGUserHistoryBot_2')
+reddit = praw.Reddit('GOGUserHistoryBot', user_agent='GOGUserHistoryBot_3.1')
 GoG = reddit.subreddit("GiftofGames")
 GoGdeletes = reddit.subreddit("GoGdeletes")
 

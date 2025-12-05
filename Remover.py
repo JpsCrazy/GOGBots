@@ -1,7 +1,7 @@
 import traceback
 import praw
 
-reddit = praw.Reddit('GOGUserHistoryBot', user_agent='GOGUserHistoryBot_3.0')
+reddit = praw.Reddit('GOGUserHistoryBot', user_agent='GOGUserHistoryBot_3.1')
 GoG = reddit.subreddit("GiftofGames")
 
 def GeneralRemove(RequestOrComment, PostID, RemovalReason, RequestTime="Error"):

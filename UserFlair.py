@@ -52,7 +52,7 @@ def doFlair(gifter,gifted,comment,GoG):
 
 #     print(gifted, receiverflair)
     #The below block of code flairs the receiver based on their flair
-    if receiverflair=="" or receiverflair is None or 'Gamer' in receiverflair:
+    if receiverflair is None or receiverflair=="" or 'Gamer' in receiverflair:
         newreceiverflair="Grabbed 1 :Grabbed1-9:"
         rcount=0
         rclass="4833a8ca-93c2-11e6-8e11-0e5c5e976c56"
@@ -99,8 +99,7 @@ def doFlair(gifter,gifted,comment,GoG):
     
     elif "Cooldown" in receiverflair:
         Wiki = GoG.wiki["cooldownlog"]
-        WikiContent = Wiki.content_md.strip()
-        WikiContent = str(WikiContent).replace("\n\n\n","\n\n")
+        WikiContent = str(Wiki.content_md.strip()).replace("\n\n\n","\n\n")
         for line in WikiContent.splitlines():
             if line is None:
                 break
@@ -127,6 +126,7 @@ def doFlair(gifter,gifted,comment,GoG):
                     WikiUpdateReason = str("Updating " + gifted)
                     Wiki.edit(content=WikiContent, reason=WikiUpdateReason)
                     comment.reply(str(gifter) + " gifted " + str(gifted) + "who's new flair is " + str(newreceiverflair) + " but is currently on a cooldown.")
+                    return
                 else:
                     print(str(gifted) + " on cooldown but error occurred while updating")
                     # BUG: cooldown flair not properly updated. Unsure why - not finding the gift?
@@ -135,18 +135,19 @@ def doFlair(gifter,gifted,comment,GoG):
             continue
 
     if newreceiverflair=="" or newreceiverflair is None:
+        print("No new receiverflair for ", gifted)
         return
-    if "Cooldown" not in receiverflair:
-        GoG.flair.set(gifted,text=newreceiverflair,flair_template_id=rclass)
-        print("Receiver " + gifted + "'s, new flair is " + newreceiverflair + " with flair class " + rclass)
-        #Sort out flair classes for both the receiver and gifter
+    
+    GoG.flair.set(gifted,text=newreceiverflair,flair_template_id=rclass)
+    print("Receiver " + gifted + "'s, new flair is " + newreceiverflair + " with flair class " + rclass)
+    #Sort out flair classes for both the receiver and gifter
 
-        comment.reply(str(gifter) + " gifted " + str(gifted) + " whose new flair is " + str(newreceiverflair))
+    comment.reply(str(gifter) + " gifted " + str(gifted) + " whose new flair is " + str(newreceiverflair))
 
 
 def doCooldown(UserToCooldown, GoG):
     # BUG: should really pass reddit down instead of re-creating it
-    reddit = praw.Reddit('GOGUserHistoryBot', user_agent='GOGUserHistoryBot_1.9')
+    reddit = praw.Reddit('GOGUserHistoryBot', user_agent='GOGUserHistoryBot_3.1')
     if ValidUser.ValidUserCheck(reddit, UserToCooldown) != 1:
         UserToCooldown = ''
         return
