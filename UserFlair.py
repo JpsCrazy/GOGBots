@@ -33,7 +33,7 @@ def doFlair(gifter,gifted,comment,GoG):
         gcount=int(gcountsearch.group(1))
         if gcount is None or gcount == 0:
             newgifterflair="No flair change"
-            print("Error for Gifter flair; no existingg grabbed count", gifter, giftee, comment)
+            print("Error for Gifter flair; no existing grabbed count", gifter, giftee, comment)
         elif gcount <=6:
             gclass="4833a8ca-93c2-11e6-8e11-0e5c5e976c56"
         elif gcount <=10:
@@ -148,18 +148,19 @@ def doFlair(gifter,gifted,comment,GoG):
 def doCooldown(UserToCooldown, GoG):
     # BUG: should really pass reddit down instead of re-creating it
     reddit = praw.Reddit('GOGUserHistoryBot', user_agent='GOGUserHistoryBot_3.1')
+    CooldownLog = GoG.wiki["cooldownlog"].content_md
     if ValidUser.ValidUserCheck(reddit, UserToCooldown) != 1:
         UserToCooldown = ''
         return
     if any(GoG.banned(redditor=UserToCooldown)) == True:
         UserToCooldown = ''
         return
-    if "cooldown" in str(next(GoG.flair("{}".format(UserToCooldown)))['flair_text']).lower():
-        GoG.modmail.create(subject="Possible Cooldown Issue", body=f"{UserToCooldown} triggered cooldown twice; flair check", recipient='JpsCrazy')
+    if "cooldown" in str(next(GoG.flair("{}".format(UserToCooldown)))['flair_text']).lower() or UserToCooldown in CooldownLog:
+        GoG.modmail.create(subject="Possible Cooldown Issue", body=f"{UserToCooldown} triggered cooldown twice; check flair and for recent GOG posts", recipient='JpsCrazy')
         UserToCooldown = ''
         return
-    
-    ExistingCooldownSearch = re.search(f'{UserToCooldown}(.*Grabbed (\d*).*)\n', GoG.wiki["cooldownlog"].content_md)
+
+    ExistingCooldownSearch = re.search(f'{UserToCooldown}(.*Grabbed (\d*).*)\n', CooldownLog)
     if ExistingCooldownSearch is not None:
         ExistingFlair = ExistingCooldownSearch.group(1)
         ExistingGrabbedCount = "Grabbed " + ExistingCooldownSearch.group(2)
@@ -169,10 +170,6 @@ def doCooldown(UserToCooldown, GoG):
 
 
 
-    if UserToCooldown in GoG.wiki["cooldownlog"].content_md:
-        GoG.modmail.create(subject="Possible Cooldown Issue", body=f"{UserToCooldown} triggered cooldown twice; flair check", recipient='JpsCrazy')
-        UserToCooldown = ''
-        return
 
     try:
         Date = datetime.date.today()

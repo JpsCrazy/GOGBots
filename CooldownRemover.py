@@ -21,6 +21,9 @@ def CooldownRemover(reddit, GoG):
             if len(line) == 0: #if line is empty, skip
                 continue
             CooldownInfo = re.search(rf"(?i)([^\s]*) (.*) \|\| ([^\s]*)(?: \w*)? \|\| (\d\d\d\d-\d\d-\d\d)", line)
+            if CooldownInfo is None:
+                print('Error parsing cooldoown', line)
+                continue
             User = CooldownInfo.group(1)
             FlairText = CooldownInfo.group(2)
             if FlairText == "None":
@@ -45,9 +48,11 @@ def CooldownRemover(reddit, GoG):
             if TimeDiff > 29:
                 print("Removing " + User + " from cooldown and resetting flair to " + FlairText)
                 try:
-                    pass
                     GoG.flair.set(User, text=FlairText, css_class=FlairCSS)
-                    GoG.modmail.create(subject="Removed from cooldown in r/GiftofGames", body=str("Your cooldown has been removed. \n\nYou may now make a [REQUEST] or enter an [OFFER] and your flair has been restored to " + FlairText + ". \n\nThis action was performed by a bot."), recipient=User)
+                    try:
+                        GoG.modmail.create(subject="Removed from cooldown in r/GiftofGames", body=str("Your cooldown has been removed. \n\nYou may now make a [REQUEST] or enter an [OFFER] and your flair has been restored to " + FlairText + ". \n\nThis action was performed by a bot."), recipient=User)
+                    except Exception as e:
+                        print("Error messaging", User, "about cooldown \n", e, traceback.format_exc())
                     WikiContent = RemoveLog(WikiContent, str(line.strip()))
                 except Exception as e:
                     print("Error resetting flair for", User, "\n", e, traceback.format_exc())

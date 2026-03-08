@@ -15,24 +15,29 @@ def RepostCheck(reddit, User, SubmissionDate, PostID, RequestOrComment="Request"
         UserPostHistory = reddit.redditor("{}".format(User)).submissions.new()
         for post in UserPostHistory:
             if post is None:
+                #print("End of posts")
                 break
             if post.banned_by!=None:
+                #print("Post already moderated", post.title)
                 continue
             if PostID == post.id:
+                #print("Skipping subject post for search")
                 continue
 
             FoundSubmissionDate = post.created_utc
 
             if FoundSubmissionDate > SubmissionDate:
-                break
+                #print("Post newer than subject post", post.title, FoundSubmissionDate, SubmissionDate)
+                continue
             
             if "giftofgames"!=str(post.subreddit).lower():
+                #print("Unrelated post", post.title)
                 continue
-
-            TimeDifference = SubmissionDate - FoundSubmissionDate
-            
-            if TimeDifference < ThreeDays:
-                if "[request]" in str(post.title).lower():
+            if "[request]" in str(post.title).lower():
+                TimeDifference = SubmissionDate - FoundSubmissionDate
+                #print(post.title, TimeDifference, ThreeDays)
+                
+                if TimeDifference < ThreeDays:
                     RequestTimeCheckDaysMinutes = round((TimeDifference / 60))
                     RequestTimeCheckDaysHours = math.floor((RequestTimeCheckDaysMinutes / 60))
                     RequestTimeCheckDaysMinutes -= RequestTimeCheckDaysHours*60

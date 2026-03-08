@@ -115,7 +115,7 @@ while True:
                     ThreeDays = 86400*3 #86400 seconds is 1 day
                     TimeDifference = int(time.time())-int(SubmissionDate)
                     if TimeDifference < ThreeDays:
-#                             print('Starting RequestLimiter.RepostCheck()')
+                        #print('Starting RequestLimiter.RepostCheck()')
                         RequestLimiter.RepostCheck(reddit, User, SubmissionDate, PostID)
                     
 #                         print('Starting RequestLimiter.PCTagCheck()')
