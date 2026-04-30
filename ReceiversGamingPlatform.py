@@ -30,12 +30,12 @@ def ProfileChecker(User, BodyText, RequestOrComment, PostID, GoG):
             ID64 = UserIDSearch.group(4).replace("\\","").replace("*","")
             UserID = "https://www.steamcommunity.com/" + UserIDSearch.group(3) + "/" + ID64
             if ID64.isdigit() is False or len(ID64) != 17:
-                print("ID64 debug: ", User, PostID, RequestOrComment, str(ID64))
+                #print("ID64 debug: ", User, PostID, RequestOrComment, str(ID64))
                 try:
                     ID64Checker = requests.get("https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=" + SteamAPIKey + "&vanityurl=" + ID64)
                     ID64JSON = ID64Checker.json()
                     ID64 = ID64JSON['response']['steamid']
-                    print("ID64 debug: ", User, PostID, RequestOrComment, str(ID64))
+                    #print("ID64 debug: ", User, PostID, RequestOrComment, str(ID64))
                 except Exception as e:
                     print("ID64 Converter", e, traceback.format_exc())
                 UserID = "https://steamcommunity.com/profiles/" + ID64

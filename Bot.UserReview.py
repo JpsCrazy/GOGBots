@@ -1,4 +1,4 @@
-#!/use/bin/python
+#!/usr/bin/python
 import praw
 import time
 import datetime
@@ -34,7 +34,7 @@ import WikiWrite
 
 ModList = "AutoModerator", "DjSoulFuck", "Saadieman", "freedomtacos", "Miniboyss", "Jaska95", "OurRobotOverlord", "JpsCrazy", "JpsCrazysBot", "fallen_fire", "MarioDesigns", "rollovertherainbow", "darkducote", "SaladMalone"
 KarmaSubs = ["FreeKarma", "FreeKarma4U", "FreeKarma4You", "DeFreeKarma", "FreeKarmaSub4Sub", "FreeKarama4UandMe", "FreeKarma4NUDES", "FreeKarmaForU", "FreeKarma247", "freekarmafromme", "karmawhore", "KarmaStore", "FreeKarmaSubreddit", "FreeKarmaChooChoo", "GetFreeKarmaAnyTime", "upvote", "KarmaForFree", "FreeKarma4All", "Karma_Exchange", "karma4karma", "getkarma", "MoreFreeKarma4U"]
-GiveawaySubs = "GiftofGames|Free|RandomActs|RandomActsOfGaming|RandomActsofKindess|randomactsofcsgo|RandomActsOfChristmas|Giveaway|Random_Acts_Of_Amazon|randomactsofamazon|RandomActsOfPolish|playitforward|steam_giveaway|RandomActsOfTf2|LeagueOfGiving|Random_Acts_of_Etsy|Random_Acts_of_Lush|RandomKindess|Random_Acts_Of_Pizza|FreeGameGiveaway|freegamecodes|giveawaysforgaming|SteamKeysFreeGiveaway|FreeSteamKeys|GiveawaysFromSpace"
+GiveawaySubs = "GiftofGames|Free|RandomActs|RandomActsOfGaming|RandomActsofKindess|randomactsofcsgo|RandomActsOfChristmas|Giveaway|Random_Acts_Of_Amazon|randomactsofamazon|RandomActsOfPolish|playitforward|steam_giveaway|RandomActsOfTf2|LeagueOfGiving|Random_Acts_of_Etsy|Random_Acts_of_Lush|RandomKindess|Random_Acts_Of_Pizza|FreeGameGiveaway|freegamecodes|giveawaysforgaming|SteamKeysFreeGiveaway|FreeSteamKeys|GiveawaysFromSpace|payitforwardgaming"
 ##r/Giveaways not included because it doesn't seem to be the same as the others
 
 ##Below variables probably don't need to be changed ever
@@ -56,6 +56,7 @@ PostHistory = 250
 reddit = praw.Reddit('GOGUserHistoryBot', user_agent='GOGUserHistoryBot_3.1')
 GoG = reddit.subreddit("GiftofGames")
 GoGdeletes = reddit.subreddit("GoGdeletes")
+ThreeDays = 86400*3 #86400 seconds is 1 day
 
 ##--------------------------------------------------------------------
 ##--------------------------------------------------------------------
@@ -105,14 +106,13 @@ while True:
             if any(GoG.banned(redditor=User)) == True:
                 continue
 
-            PostLogLine = "https://reddit.com/comments/" + str(PostID) + "/" + str(User)
-            if PostLogLine in GoG.wiki["postlog"].content_md:
-                continue
-            WikiWrite.WriteWiki("postlog", PostLogLine, GoG)
+            #PostLogLine = "https://reddit.com/comments/" + str(PostID) + "/" + str(User)
+            #if PostLogLine in GoG.wiki["postlog"].content_md:
+                #continue
+            #WikiWrite.WriteWiki("postlog", PostLogLine, GoG)
             
             if "[request]" in str(Title).lower():
                 try:
-                    ThreeDays = 86400*3 #86400 seconds is 1 day
                     TimeDifference = int(time.time())-int(SubmissionDate)
                     if TimeDifference < ThreeDays:
                         #print('Starting RequestLimiter.RepostCheck()')
@@ -174,10 +174,12 @@ while True:
                 continue
             if any(GoG.banned(redditor=User)) == True:
                 continue
-            PostLogLine = "https://reddit.com/comments/" + str(PostParentID) + "/" + str(User) +"/" + str(PostID)
-            if PostLogLine in GoG.wiki["postlog"].content_md:
-                continue
-            WikiWrite.WriteWiki("postlog", PostLogLine, GoG)
+                
+                #post log is completely broken? page never loads
+            #PostLogLine = "https://reddit.com/comments/" + str(PostParentID) + "/" + str(User) +"/" + str(PostID)
+            #if PostLogLine in GoG.wiki["postlog"].content_md:
+            #    continue
+            #WikiWrite.WriteWiki("postlog", PostLogLine, GoG)
 
             comment.refresh() #required; no clue why
         

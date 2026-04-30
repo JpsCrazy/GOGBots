@@ -156,17 +156,17 @@ def doCooldown(UserToCooldown, GoG):
         UserToCooldown = ''
         return
     if "cooldown" in str(next(GoG.flair("{}".format(UserToCooldown)))['flair_text']).lower() or UserToCooldown in CooldownLog:
-        GoG.modmail.create(subject="Possible Cooldown Issue", body=f"{UserToCooldown} triggered cooldown twice; check flair and for recent GOG posts", recipient='JpsCrazy')
+        #GoG.modmail.create(subject="Possible Cooldown Issue", body=f"{UserToCooldown} triggered cooldown twice; check flair and for recent GOG posts", recipient='JpsCrazy')
         UserToCooldown = ''
         return
 
-    ExistingCooldownSearch = re.search(f'{UserToCooldown}(.*Grabbed (\d*).*)\n', CooldownLog)
-    if ExistingCooldownSearch is not None:
-        ExistingFlair = ExistingCooldownSearch.group(1)
-        ExistingGrabbedCount = "Grabbed " + ExistingCooldownSearch.group(2)
-        NewGrabbedCount = "Grabbed " + str(int(ExistingCooldownSearch.group(2))+1)
-        UpdatedFlair = ExistingFlair.replace(ExistingGrabbedCount,NewGrabbedCount)
-        #this is incomplete. Create wiki update?
+    #ExistingCooldownSearch = re.search(f'(({UserToCooldown})(.*Grabbed (\d*).*))\n', CooldownLog)
+    #if ExistingCooldownSearch is not None:
+        #ExistingFlair = ExistingCooldownSearch.group(1)
+        #NewGrabbedCount = "Grabbed " + str(int(ExistingCooldownSearch.group(3))+1)
+        #UpdatedFlair = ExistingFlair.replace(ExistingGrabbedCount,NewGrabbedCount)
+        #WikiContent = str(CooldownLog).replace(ExistingFlair,UpdatedFlair).replace("\n\n\n","\n\n")
+        #Wiki.edit(content=WikiContent, reason=WikiUpdateReason)
 
 
 
