@@ -95,12 +95,13 @@ while True:
             try:
                 #SearchQuery = f'title:"[GOG]" author:"{Giftee}"'
                 #UserPosts = GoG.search(SearchQuery, sort="new", time_filter="month") ##Searches for [GOG] tags by the giftee for the gifter. Prone to false negatives.
-                UserPosts = reddit.redditor("{}".format(Giftee)).submissions.new() ##Returns posts from receiver
+                UserPosts = reddit.redditor(Giftee).submissions.new() ##Returns posts from receiver
                 for post in UserPosts:
                     if post is None:
                         break
 
                     GracePeriod = GiftDate - timedelta(days=3)
+                    print(post.title, post.created_utc, Gifter, GracePeriod.timestamp())
                     if post.created_utc < GracePeriod.timestamp():
                         #print('Submissions older than gift date; end')
                         break
@@ -111,9 +112,9 @@ while True:
 
                     GOGThread = re.search(rf'(?i)^\s*\[GOG\].*({Gifter}|{GifterEscaped})', post.title)
                     if GOGThread is not None:
-                        #print('New GOG thread found', str(post.title), Giftee, Gifter)
+                        print('New GOG thread found', str(post.title), Giftee, Gifter)
                         GOGFound = True
-                        WikiWrite.WriteWiki("gogthreadlog", GOGLineFound, GoG)
+                        #WikiWrite.WriteWiki("gogthreadlog", GOGLineFound, GoG)
                         break
 
             except PrawcoreException as e:
